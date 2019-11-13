@@ -1,9 +1,13 @@
 package hangmanjpa.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class User {
@@ -16,6 +20,26 @@ public class User {
 	private int totalPoints;
 	private String preferredModelColor;
 	private String preferredDifficulty;
+
+	@OneToMany(mappedBy = "user")
+	private List<Game> games;
+
+	@OneToMany(mappedBy = "user")
+	private List<UserSecretQuestion> userSecretQuestions;
+
+	public User(int id, String username, String password, int totalPoints, String preferredModelColor,
+			String preferredDifficulty) {
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.totalPoints = totalPoints;
+		this.preferredModelColor = preferredModelColor;
+		this.preferredDifficulty = preferredDifficulty;
+	}
+
+	public User() {
+		super();
+	}
 
 	public int getId() {
 		return id;
@@ -63,6 +87,22 @@ public class User {
 
 	public void setPreferredDifficulty(String preferredDifficulty) {
 		this.preferredDifficulty = preferredDifficulty;
+	}
+
+	public ArrayList<Game> getGames() {
+		return new ArrayList<Game>(games);
+	}
+
+	public void setGames(List<Game> games) {
+		this.games = games;
+	}
+
+	public List<UserSecretQuestion> getUserSecretQuestions() {
+		return userSecretQuestions;
+	}
+
+	public void setUserSecretQuestions(List<UserSecretQuestion> userSecretQuestions) {
+		this.userSecretQuestions = userSecretQuestions;
 	}
 
 	@Override

@@ -14,9 +14,10 @@
 	<class>hangman.entities.Definition</class>
 	<class>hangman.entities.Example</class>
 	<class>hangman.entities.SecretQuestion</class>
+	<class>hangman.entities.UserSecretQuestion</class>
 
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/hangman?useSSL=false" />
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/hangman?allowPublicKeyRetrieval=true&amp;useSSL=false" />
       <property name="javax.persistence.jdbc.user" value="hangmanuser"/>
       <property name="javax.persistence.jdbc.password" value="hangmanuser" />
       <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />

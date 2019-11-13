@@ -1,9 +1,14 @@
 package hangman.test;
 
+import java.util.ArrayList;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import hangmanjpa.entities.Definition;
+import hangmanjpa.entities.Example;
+import hangmanjpa.entities.Game;
 import hangmanjpa.entities.User;
 
 public class InitialDBTest {
@@ -27,14 +32,26 @@ public class InitialDBTest {
 	   2. Verify that the data pulled from the DB via Java entity matches
 */ 
 		
-		User user = em.find(User.class, 1);
 		
 		// We won't print these out in the JUnit.  This is just for a quick test
-		System.out.println("ID: " + user.getId());
-		System.out.println("Username: " + user.getUsername());
-		System.out.println("Password: " + user.getPassword());
-		System.out.println("Preferred color: " + user.getPreferredModelColor());
-		System.out.println("Preferred difficulty: " + user.getPreferredDifficulty());
+		User user = em.find(User.class, 1);
+		ArrayList<Game> games = user.getGames();
+		
+		for (Game g: games) {
+			System.out.println(g);
+			
+			ArrayList<Definition> defs = g.getWord().getDefinitions();
+			
+			for (Definition d: defs) {
+				System.out.println(d);
+				
+				ArrayList<Example> examples = d.getExamples();
+				
+				for (Example ex: examples) {
+					System.out.println(ex);
+				}
+			}
+		}
 		
 		
 		// EMs are temporary and typically run briefly inside a method 

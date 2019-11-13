@@ -111,6 +111,42 @@ CREATE TABLE IF NOT EXISTS `example` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `secret_question`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `secret_question` ;
+
+CREATE TABLE IF NOT EXISTS `secret_question` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `question` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `user_secret_question`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `user_secret_question` ;
+
+CREATE TABLE IF NOT EXISTS `user_secret_question` (
+  `question_id` INT NOT NULL,
+  `user_id` INT NOT NULL,
+  `answer` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`question_id`, `user_id`),
+  INDEX `fk_user_secret_question_user_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `fk_user_id`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_secret_question_id`
+    FOREIGN KEY (`question_id`)
+    REFERENCES `secret_question` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
 SET SQL_MODE = '';
 DROP USER IF EXISTS hangmanuser;
 SET SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
@@ -190,6 +226,49 @@ INSERT INTO `example` (`id`, `definition_id`, `sentence`) VALUES (2, 2, 'We told
 INSERT INTO `example` (`id`, `definition_id`, `sentence`) VALUES (3, 2, 'He was a thorough-going old Tory ... who seldom himself went near the metropolis, unless called _______ by some occasion of cattle-showing.');
 INSERT INTO `example` (`id`, `definition_id`, `sentence`) VALUES (4, 3, '... that solemn interval of time when the gloom of midnight __________ the globe ....');
 INSERT INTO `example` (`id`, `definition_id`, `sentence`) VALUES (5, 3, 'It requires no stretch of mind to conceive that a man placed in a corner of Germany may be every whit as pragmatical and self-important as another man placed in Newhaven, and withal as liable to confound and _________ every subject that may fall his way ....');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `secret_question`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `hangman`;
+INSERT INTO `secret_question` (`id`, `question`) VALUES (1, 'What is your favorite movie?');
+INSERT INTO `secret_question` (`id`, `question`) VALUES (2, 'What street did you grow up on?');
+INSERT INTO `secret_question` (`id`, `question`) VALUES (3, 'Favorite color?');
+INSERT INTO `secret_question` (`id`, `question`) VALUES (4, 'Favorite web browser?');
+INSERT INTO `secret_question` (`id`, `question`) VALUES (5, 'Favorite website?');
+INSERT INTO `secret_question` (`id`, `question`) VALUES (6, 'Favorite forum?');
+INSERT INTO `secret_question` (`id`, `question`) VALUES (7, 'Favorite social media website?');
+INSERT INTO `secret_question` (`id`, `question`) VALUES (8, 'What is the name of your first school?');
+INSERT INTO `secret_question` (`id`, `question`) VALUES (9, 'What is the name of your favorite pet?\n');
+INSERT INTO `secret_question` (`id`, `question`) VALUES (10, 'Who is your favorite actor, musician, or artist?\n');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `user_secret_question`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `hangman`;
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (1, 1, 'Ender\'s Game');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (2, 1, 'UMUC Rd');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (3, 1, 'Black');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (3, 2, 'Black');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (5, 2, 'reddit.com');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (7, 2, 'reddit.com');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (8, 3, 'UMUC');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (9, 3, 'Steve');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (10, 3, 'Metallica');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (4, 4, 'Safari');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (5, 4, 'reddit.com');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (6, 4, 'reddit.com');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (1, 5, 'Bambi');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (5, 5, 'reddit.com');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (6, 5, 'reddit.com');
 
 COMMIT;
 

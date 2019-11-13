@@ -13,6 +13,7 @@
 	<class>hangman.entities.Word</class>
 	<class>hangman.entities.Definition</class>
 	<class>hangman.entities.Example</class>
+	<class>hangman.entities.SecretQuestion</class>
 
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/hangman?useSSL=false" />

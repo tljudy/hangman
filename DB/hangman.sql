@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `user_secret_question` (
   `user_id` INT NOT NULL,
   `answer` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`question_id`, `user_id`),
-  INDEX `fk_user_secret_question_user_idx` (`user_id` ASC) VISIBLE,
+  INDEX `fk_secret_question_id_idx` (`question_id` ASC) VISIBLE,
   CONSTRAINT `fk_user_id`
     FOREIGN KEY (`user_id`)
     REFERENCES `user` (`id`)
@@ -235,16 +235,16 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `hangman`;
-INSERT INTO `secret_question` (`id`, `question`) VALUES (1, 'What is your favorite movie?');
-INSERT INTO `secret_question` (`id`, `question`) VALUES (2, 'What street did you grow up on?');
-INSERT INTO `secret_question` (`id`, `question`) VALUES (3, 'Favorite color?');
-INSERT INTO `secret_question` (`id`, `question`) VALUES (4, 'Favorite web browser?');
-INSERT INTO `secret_question` (`id`, `question`) VALUES (5, 'Favorite website?');
-INSERT INTO `secret_question` (`id`, `question`) VALUES (6, 'Favorite forum?');
-INSERT INTO `secret_question` (`id`, `question`) VALUES (7, 'Favorite social media website?');
-INSERT INTO `secret_question` (`id`, `question`) VALUES (8, 'What is the name of your first school?');
-INSERT INTO `secret_question` (`id`, `question`) VALUES (9, 'What is the name of your favorite pet?\n');
-INSERT INTO `secret_question` (`id`, `question`) VALUES (10, 'Who is your favorite actor, musician, or artist?\n');
+INSERT INTO `secret_question` (`id`, `question`) VALUES (1, ' What is your favorite movie?');
+INSERT INTO `secret_question` (`id`, `question`) VALUES (2, ' What street did you grow up on?');
+INSERT INTO `secret_question` (`id`, `question`) VALUES (3, ' Favorite color?');
+INSERT INTO `secret_question` (`id`, `question`) VALUES (4, ' Favorite web browser?');
+INSERT INTO `secret_question` (`id`, `question`) VALUES (5, ' Favorite website?');
+INSERT INTO `secret_question` (`id`, `question`) VALUES (6, ' Favorite forum?');
+INSERT INTO `secret_question` (`id`, `question`) VALUES (7, ' Favorite social media website?');
+INSERT INTO `secret_question` (`id`, `question`) VALUES (8, ' What is the name of your first school?');
+INSERT INTO `secret_question` (`id`, `question`) VALUES (9, ' What is the name of your favorite pet?');
+INSERT INTO `secret_question` (`id`, `question`) VALUES (10, ' Who is your favorite actor');
 
 COMMIT;
 
@@ -254,21 +254,21 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `hangman`;
-INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (1, 1, 'Ender\'s Game');
-INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (2, 1, 'UMUC Rd');
-INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (3, 1, 'Black');
-INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (3, 2, 'Black');
-INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (5, 2, 'reddit.com');
-INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (7, 2, 'reddit.com');
-INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (8, 3, 'UMUC');
-INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (9, 3, 'Steve');
-INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (10, 3, 'Metallica');
-INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (4, 4, 'Safari');
-INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (5, 4, 'reddit.com');
-INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (6, 4, 'reddit.com');
-INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (1, 5, 'Bambi');
-INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (5, 5, 'reddit.com');
-INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (6, 5, 'reddit.com');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (1,  1, ' Ender\'s Game');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (2,  1, ' UMUC Rd');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (3,  1, ' Black');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (3,  2, ' Black');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (5,  2, ' reddit.com');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (7,  2, ' reddit.com');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (8,  3, ' UMUC');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (9,  3, ' Steve');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (10,  3, ' Metallica');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (4,  4, ' Safari');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (5,  4, ' reddit.com');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (6,  4, ' reddit.com');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (1,  5, ' Bambi');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (5,  5, ' reddit.com');
+INSERT INTO `user_secret_question` (`question_id`, `user_id`, `answer`) VALUES (6,  5, ' reddit.com');
 
 COMMIT;
 

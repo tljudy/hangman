@@ -3,6 +3,7 @@ package hangmanjpa.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,8 +18,15 @@ public class User {
 
 	private String username;
 	private String password;
+	
+	// Database column names are totalPoints/preferredModelColor/preferredDifficulty, but JPA does not like caps I guess
+	@Column(name="totalpoints")
 	private int totalPoints;
+	
+	@Column(name="preferredmodelcolor")
 	private String preferredModelColor;
+	
+	@Column(name="preferreddifficulty")
 	private String preferredDifficulty;
 
 	@OneToMany(mappedBy = "user")

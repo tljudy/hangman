@@ -23,11 +23,12 @@ DROP TABLE IF EXISTS `user` ;
 CREATE TABLE IF NOT EXISTS `user` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(255) NOT NULL,
-  `password` VARCHAR(255) NOT NULL COMMENT 'URL',
+  `password` VARCHAR(255) NOT NULL,
   `totalPoints` INT NOT NULL DEFAULT 0,
   `preferredModelColor` VARCHAR(45) NULL,
   `preferredDifficulty` VARCHAR(45) NULL,
-  PRIMARY KEY (`id`))
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC))
 ENGINE = InnoDB;
 
 
@@ -58,8 +59,8 @@ CREATE TABLE IF NOT EXISTS `game` (
   `pointsAwarded` INT NULL DEFAULT 0,
   `gameDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
-  INDEX `word_id_idx` (`word_id` ASC) VISIBLE,
+  INDEX `user_id_idx` (`user_id` ASC),
+  INDEX `word_id_idx` (`word_id` ASC),
   CONSTRAINT `game_user`
     FOREIGN KEY (`user_id`)
     REFERENCES `user` (`id`)
@@ -84,7 +85,7 @@ CREATE TABLE IF NOT EXISTS `definition` (
   `definition` TEXT NULL,
   `partOfSpeech` VARCHAR(45) NULL,
   PRIMARY KEY (`id`),
-  INDEX `definition_word_idx` (`word_id` ASC) VISIBLE,
+  INDEX `definition_word_idx` (`word_id` ASC),
   CONSTRAINT `definition_word`
     FOREIGN KEY (`word_id`)
     REFERENCES `word` (`id`)
@@ -103,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `example` (
   `definition_id` INT NOT NULL,
   `sentence` TEXT NULL,
   PRIMARY KEY (`id`),
-  INDEX `example_definition_idx` (`definition_id` ASC) VISIBLE,
+  INDEX `example_definition_idx` (`definition_id` ASC),
   CONSTRAINT `example_definition`
     FOREIGN KEY (`definition_id`)
     REFERENCES `definition` (`id`)
@@ -134,7 +135,7 @@ CREATE TABLE IF NOT EXISTS `user_secret_question` (
   `user_id` INT NOT NULL,
   `answer` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`question_id`, `user_id`),
-  INDEX `fk_secret_question_id_idx` (`question_id` ASC) VISIBLE,
+  INDEX `fk_secret_question_id_idx` (`question_id` ASC),
   CONSTRAINT `fk_user_id`
     FOREIGN KEY (`user_id`)
     REFERENCES `user` (`id`)

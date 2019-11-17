@@ -3,6 +3,7 @@ package hangmanjpa.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,6 +21,8 @@ public class Definition {
 	private int id;
 
 	private String definition;
+	// JPA really hates the naming convention from the database
+	@Column(name = "partofspeech")
 	private String partOfSpeech;
 
 	@JsonIgnore
@@ -74,11 +77,18 @@ public class Definition {
 	}
 
 	public ArrayList<Example> getExamples() {
+		if (examples == null) return new ArrayList<Example>();
 		return new ArrayList<Example>(examples);
 	}
 
 	public void setExamples(List<Example> examples) {
 		this.examples = examples;
+	}
+	
+	public void addExample(Example ex) {
+		if (examples == null) examples = new ArrayList<Example>();
+		examples.add(ex);
+		ex.setDefinition(this);
 	}
 
 	@Override

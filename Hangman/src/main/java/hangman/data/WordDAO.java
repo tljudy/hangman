@@ -7,4 +7,6 @@ import hangmanjpa.entities.Word;
 public interface WordDAO {
 	Word getWordById(int id);
 	List<Word> getAllWords();
+	Word findWordByName(String word);
+	Word addWord(Word word);
 }

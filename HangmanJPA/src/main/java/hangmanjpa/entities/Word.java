@@ -58,6 +58,14 @@ public class Word {
 		return difficulty;
 	}
 
+	public String determineDifficulty() {
+		return syllables < 4 
+				? "Easy" 
+						: syllables <= 6
+						? "Medium" 
+								: "Hard";
+	}
+
 	public void setDifficulty(String difficulty) {
 		this.difficulty = difficulty;
 	}
@@ -74,10 +82,17 @@ public class Word {
 		return new ArrayList<Definition>(definitions);
 	}
 
-	public void setDefinitions(List<Definition> definitions) {
-		this.definitions = definitions;
+	public void addDefinition(Definition definition) {
+		if (definition == null) return;
+		
+		if (definitions == null) definitions = new ArrayList<Definition>();
+		this.definitions.add(definition);
+		
+		if (definition.getWord() != this) {
+			definition.setWord(this);
+		}
 	}
-	
+
 	public List<Game> getGames() {
 		return games;
 	}

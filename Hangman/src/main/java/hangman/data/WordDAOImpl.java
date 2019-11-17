@@ -41,7 +41,7 @@ public class WordDAOImpl implements WordDAO {
 
 	@Override
 	public List<Word> getAllWords() {
-		return em.createQuery("SELECT * FROM Word", Word.class).getResultList();
+		return em.createQuery("SELECT w FROM Word", Word.class).getResultList();
 	}
 	
 	@Override

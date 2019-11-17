@@ -26,7 +26,7 @@ public class UserDAOImpl implements UserDAO {
 		if (username == null) return null;
 		
 		User user = null;
-		String query = "SELECT * FROM User u WHERE u.username = :email";
+		String query = "SELECT u FROM User u WHERE u.username = :email";
 		
 		try {
 			user = em.createQuery(query, User.class).setParameter("username", username).getSingleResult();

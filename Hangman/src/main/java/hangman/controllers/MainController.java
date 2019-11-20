@@ -41,7 +41,6 @@ public class MainController {
 	public ModelAndView getWord() {
 		ModelAndView mv = new ModelAndView("index");
 		long count = wordDAO.getWordCount();
-		System.out.println(count);
 		int random = (int)Math.round(Math.random() * count + 1);
 		
 		Word w = wordDAO.getWordById(random);

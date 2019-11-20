@@ -14,7 +14,7 @@ import hangmanjpa.entities.Definition;
 import hangmanjpa.entities.Example;
 import hangmanjpa.entities.Word;
 
-// Stealing some data from Dictionary.com since it has a fairly predictable layout
+// Borrow some data from Dictionary.com since it has a fairly predictable layout
 
 @Component
 public class Scraper {
@@ -30,26 +30,31 @@ public class Scraper {
 	private String word;
 
 	public Word Scrape(String word) {
-		this.word = word; 
-		
-		if (wordDAO.findWordByName(word) != null) {
-			return null;
+		this.word = word;
+		Word wordObj = wordDAO.findWordByName(word);
+		Document doc = null;
+
+		// Word is already in the DB
+		if (wordObj != null) {
+			return wordObj;
 		}
 
-		Document doc = null;
 
 		// jsoup is an external library for web scraping
 		try {
 			doc = Jsoup.connect("https://www.dictionary.com/browse/" + word.toLowerCase()).get();
-
 		} catch (org.jsoup.HttpStatusException ex) {
 			// no such word in online database
 			return null;
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
-		syllables = doc.getElementsByClass("evh0tcl2").first().text().split(",")[0].split("-").length;
-		partOfSpeech = doc.getElementsByClass("luna-pos").first().text().split(",")[0];
+
+		// Count syllables
+		Elements syllablesParent = doc.getElementsByClass("evh0tcl2");
+		String syls = syllablesParent.first().text().split(";")[0];
+		String s = syls.split(" or ")[0];
+		syllables = s.split(",")[0].split("-").length;
 
 		// Stage a new word for the database
 		Word newWord = new Word();
@@ -60,7 +65,7 @@ public class Scraper {
 		// Persist the word into the database
 		newWord = wordDAO.addWord(newWord);
 
-		// Definitions are lumped inside a div "e1hk9ate4"
+		// Definitions are lumped inside a div: "e1hk9ate4"
 		Element row = doc.getElementsByClass("e1hk9ate4").first();
 
 		// Individual definitions
@@ -75,39 +80,41 @@ public class Scraper {
 				continue;
 			}
 
-			Definition d = addDefs(newWord, def);
+			Definition d = addWordDefinitions(newWord, def);
 
-			// Add examples found elsewhere on the page
+			// Add sentence/examples found elsewhere on the page
 			if (d.getExamples() == null || d.getExamples().size() == 0) {
 				if (els.size() > 0) {
 					Example ex = new Example();
 
 					ex.setSentence(els.get(0).text());
 					addExampleToDef(d, ex);
-					
+
 					els.remove(0);
 				}
 			}
-
 		}
 
-		return null;
+		return newWord;
 	}
 
-	private Definition addDefs(Word newWord, Element def) {
+	private Definition addWordDefinitions(Word newWord, Element def) {
 		// Temporary list for definition's embedded example sentences, if any
 		ArrayList<Example> examples = null;
 
+		// Definition has one or more embedded example sentences
 		if (def.children().size() > 0) {
 			examples = new ArrayList<>();
 			Elements els = def.children();
 
 			for (Element child : els) {
-				if (child.className().contains("luna-xref")) continue;
-				
+				if (child.className().contains("luna-xref"))
+					continue;
+
 				Example ex = new Example();
 				ex.setSentence(child.text());
 				examples.add(ex);
+				// Don't pick the same example for the next definition
 				child.remove();
 			}
 		}
@@ -117,7 +124,7 @@ public class Scraper {
 		d.setDefinition(def.text());
 		d.setPartOfSpeech(partOfSpeech);
 		d.setWord(newWord);
-		
+
 		if (d.getDefinition().toLowerCase().contains(word)) {
 			d.setDefinition(d.getDefinition().replaceAll("(?i)" + word, getUnderscores()));
 		}
@@ -145,17 +152,19 @@ public class Scraper {
 
 		ex.setDefinition(def);
 		def.addExample(exDAO.addExample(ex));
-		
+
 		return ex;
 	}
-	
+
+	// For replacing words inside definitions/examples that give away the answer
 	private String getUnderscores() {
 		StringBuilder sb = new StringBuilder();
-		
+
 		for (int i = 0; i < word.length(); i++) {
 			sb.append("_");
 		}
-		
+
 		return sb.toString();
 	}
+	
 }

@@ -8,3 +8,5 @@ bin
 .gradle
 *.war
 *.bak
+words.txt
+hangman_bu.sql

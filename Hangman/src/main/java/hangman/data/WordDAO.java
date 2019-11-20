@@ -9,4 +9,6 @@ public interface WordDAO {
 	List<Word> getAllWords();
 	Word findWordByName(String word);
 	Word addWord(Word word);
+	boolean updateWord(Word word);
+	long getWordCount();
 }

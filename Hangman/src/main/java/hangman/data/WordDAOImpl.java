@@ -41,7 +41,30 @@ public class WordDAOImpl implements WordDAO {
 
 	@Override
 	public List<Word> getAllWords() {
-		return em.createQuery("SELECT w FROM Word", Word.class).getResultList();
+		return em.createQuery("SELECT w FROM Word w", Word.class).getResultList();
+	}
+	
+	@Override
+	public long getWordCount() {
+		return (long)em.createQuery("SELECT COUNT(w.id) FROM Word w").getSingleResult();
+	}
+	
+	@Override
+	public boolean updateWord(Word word) {
+		Word managed = em.find(Word.class, word.getId());
+		
+		if (managed == null) return false;
+		
+		try {
+			managed.setDifficulty(word.getDifficulty());
+			managed.setSyllables(word.getSyllables());
+			managed.setWord(word.getWord());
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 	
 	@Override

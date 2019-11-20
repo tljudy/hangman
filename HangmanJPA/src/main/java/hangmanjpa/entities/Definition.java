@@ -5,14 +5,13 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Definition {
@@ -25,12 +24,11 @@ public class Definition {
 	@Column(name = "partofspeech")
 	private String partOfSpeech;
 
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "word_id")
 	private Word word;
 
-	@OneToMany(mappedBy = "definition")
+	@OneToMany(mappedBy = "definition", fetch = FetchType.EAGER)
 	private List<Example> examples;
 
 	public Definition(int id, String definition, String partOfSpeech, Word word) {
@@ -77,18 +75,27 @@ public class Definition {
 	}
 
 	public ArrayList<Example> getExamples() {
-		if (examples == null) return new ArrayList<Example>();
+		if (examples == null)
+			return new ArrayList<Example>();
 		return new ArrayList<Example>(examples);
 	}
 
 	public void setExamples(List<Example> examples) {
 		this.examples = examples;
 	}
-	
+
 	public void addExample(Example ex) {
-		if (examples == null) examples = new ArrayList<Example>();
+		if (ex == null)
+			return;
+		if (examples == null) {
+			examples = new ArrayList<Example>();
+		}
+
 		examples.add(ex);
-		ex.setDefinition(this);
+
+		if (ex.getDefinition() != this) {
+			ex.setDefinition(this);
+		}
 	}
 
 	@Override
@@ -115,8 +122,8 @@ public class Definition {
 
 	@Override
 	public String toString() {
-		return "Definition [id=" + id + ", definition=" + definition + ", partOfSpeech=" + partOfSpeech + ", word="
-				+ word + "]";
+		return "Definition [id=" + id + ", definition=" + definition + ", partOfSpeech=" + partOfSpeech + ", examples="
+				+ examples + "]";
 	}
 
 }

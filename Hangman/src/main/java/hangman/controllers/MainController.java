@@ -1,13 +1,18 @@
 package hangman.controllers;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import hangman.data.DefinitionDAO;
 import hangman.data.Scraper;
 import hangman.data.UserDAO;
+import hangman.data.WordDAO;
+import hangmanjpa.entities.Word;
 
 @RestController
 public class MainController {
@@ -15,18 +20,37 @@ public class MainController {
 	private UserDAO user;
 	@Autowired
 	private Scraper sc;
-	
-	@RequestMapping(path = {"/", "home.do"}, method = RequestMethod.GET)
-	public ModelAndView index() {
+	@Autowired
+	private WordDAO wordDAO;
+	@Autowired
+	private DefinitionDAO defDAO;
+
+	@RequestMapping(path = { "/", "home.do" }, method = RequestMethod.GET)
+	public ModelAndView index() throws IOException {
 		ModelAndView mv = new ModelAndView("index");
+		
+		// just temporary to display some test db data
 		mv.addObject("users", user.getAllUsers());
-		
-		sc.Scrape("peeper");
-		sc.Scrape("alive");
-		sc.Scrape("dictionary");
-		sc.Scrape("brontosaurus");
-		
+			
+
 		return mv;
 	}
 	
+	// Test for getting a random word
+	@RequestMapping(path = "getWord.do", method = RequestMethod.GET)
+	public ModelAndView getWord() {
+		ModelAndView mv = new ModelAndView("index");
+		long count = wordDAO.getWordCount();
+		System.out.println(count);
+		int random = (int)Math.round(Math.random() * count + 1);
+		
+		Word w = wordDAO.getWordById(random);
+		w.setDefinitions(defDAO.getWordDefinitions(w));
+		
+		mv.addObject("word", w);
+		
+		return mv;
+	}
+
 }
+

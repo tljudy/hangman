@@ -79,12 +79,19 @@ public class Word {
 	}
 
 	public ArrayList<Definition> getDefinitions() {
-		return new ArrayList<Definition>(definitions);
+		if (definitions != null) {
+			return new ArrayList<Definition>(definitions);
+		}
+		return null;
 	}
+	
+	public void setDefinitions(List<Definition> definitions) {
+		this.definitions = definitions;
+	}
+
 
 	public void addDefinition(Definition definition) {
 		if (definition == null) return;
-		
 		if (definitions == null) definitions = new ArrayList<Definition>();
 		this.definitions.add(definition);
 		
@@ -95,6 +102,21 @@ public class Word {
 
 	public List<Game> getGames() {
 		return games;
+	}
+
+	public void addGame(Game game) {
+		if (game == null) 
+			return;
+		if (games == null) {
+			games = new ArrayList<Game>();
+		}
+		
+		this.games.add(game);
+		
+		if (game.getWord() != this) {
+			game.setWord(this);
+		}
+		
 	}
 
 	public void setGames(List<Game> games) {
@@ -125,7 +147,8 @@ public class Word {
 
 	@Override
 	public String toString() {
-		return "Word [id=" + id + ", word=" + word + ", difficulty=" + difficulty + ", syllables=" + syllables + "]";
+		return "Word [id=" + id + ", word=" + word + ", difficulty=" + difficulty + ", syllables=" + syllables
+				+ ", definitions=" + definitions + "]";
 	}
 
 }

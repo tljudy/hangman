@@ -7,8 +7,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 public class Example {
 	@Id
@@ -17,7 +15,6 @@ public class Example {
 
 	private String sentence;
 
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "definition_id")
 	private Definition definition;
@@ -45,6 +42,8 @@ public class Example {
 	}
 
 	public void setSentence(String sentence) {
+		if (sentence == null)
+			return;
 		this.sentence = sentence;
 	}
 
@@ -53,6 +52,8 @@ public class Example {
 	}
 
 	public void setDefinition(Definition definition) {
+		if (definition == null) 
+			return;
 		this.definition = definition;
 	}
 
@@ -80,7 +81,7 @@ public class Example {
 
 	@Override
 	public String toString() {
-		return "Example [id=" + id + ", sentence=" + sentence + ", definition=" + definition + "]";
+		return "Example [id=" + id + ", sentence=" + sentence + "]";
 	}
 
 }

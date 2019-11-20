@@ -26,12 +26,12 @@ public class DefinitionDAOImpl implements DefinitionDAO {
 	@Override
 	public List<Definition> getWordDefinitions(Word word) {
 		if (word == null) return null;
-		String query = "SELECT d FROM Definition d WHERE d.word_id = :word_id";
+		String query = "SELECT d FROM Definition d WHERE d.word.id = " + word.getId();
 		
 		List<Definition> defs = null;
 		
 		try {
-			defs = em.createQuery(query, Definition.class).setParameter("word_id", word).getResultList();
+			defs = em.createQuery(query, Definition.class).getResultList();
 		} catch (javax.persistence.NoResultException e) {
 			return null;
 		} catch (Exception e) {

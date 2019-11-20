@@ -86,6 +86,8 @@ public class User {
 	}
 
 	public void setPreferredModelColor(String preferredModelColor) {
+		if (preferredModelColor == null) 
+			return;
 		this.preferredModelColor = preferredModelColor;
 	}
 
@@ -94,6 +96,8 @@ public class User {
 	}
 
 	public void setPreferredDifficulty(String preferredDifficulty) {
+		if (preferredDifficulty == null) 
+			return;
 		this.preferredDifficulty = preferredDifficulty;
 	}
 
@@ -101,16 +105,28 @@ public class User {
 		return new ArrayList<Game>(games);
 	}
 
-	public void setGames(List<Game> games) {
-		this.games = games;
+	public void addGame(Game game) {
+		if (game == null)
+			return;
+		if (games == null) {
+			games = new ArrayList<Game>();
+		}
+		
+		games.add(game);
 	}
 
 	public List<UserSecretQuestion> getUserSecretQuestions() {
 		return userSecretQuestions;
 	}
 
-	public void setUserSecretQuestions(List<UserSecretQuestion> userSecretQuestions) {
-		this.userSecretQuestions = userSecretQuestions;
+	public void addUserSecretQuestions(UserSecretQuestion userSecretQuestion) {
+		if (userSecretQuestion == null)
+			return;
+		if (userSecretQuestions == null) {
+			userSecretQuestions = new ArrayList<UserSecretQuestion>();
+		}
+
+		userSecretQuestions.add(userSecretQuestion);
 	}
 
 	@Override

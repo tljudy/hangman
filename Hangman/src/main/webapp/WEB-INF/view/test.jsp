@@ -34,10 +34,79 @@
 </nav>
     
   <div class="container">  
+  
+  
+    <!--  
+    		THIS IS JUST AN EXAMPLE 
+    -->      
+      
+      <form action="getWord.do" method="GET">
+	       <div class="col-sm-4">
+	       		<button name="getWord" type="submit" class="btn btn-primary btn-sm" style="margin-top: 20px">Click for a test word</button>
+	       </div>
+       </form>
+       
+       
    <div class="row">
        
        <div class="col-sm-12">
                <h3>Word Hint:</h3>
+               
+               
+    <!--  
+    		THIS IS JUST AN EXAMPLE 
+    -->
+               <c:if test="${ not empty word }">
+               
+               		<p>
+               			<h1 style="font:underline">Word: ${word.word }</h1>
+               			<ul>
+               				<li>ID: ${word.id }</li>
+               				<li>Difficulty: ${word.difficulty }</li>
+               				<li>Syllables: ${word.syllables }</li>
+               			</ul>
+               		</p>
+               		
+               		<c:if test="${ not empty word.definitions }">
+               		
+	               		<p>
+	               			<c:forEach var="def" items="${word.definitions }">
+
+		               			<h4>Definition</h4>
+		               			<ul>
+		               				<li>ID: ${def.id}</li>
+		               				<li>Part of Speech: ${def.partOfSpeech }</li>
+		               				<li>Definition: ${def.definition}</li>
+	               				</ul>
+	               				
+	               				<c:if test="${not empty def.examples }">
+	               				
+	               					<c:forEach var="ex" items="${def.examples }">
+	               					
+	               					<div style="margin-left: 50px">
+		               					<h4>Example</h4>
+		               					<ul>
+			               					<li>ID: ${ex.id }</li>
+			               					<li>Example: ${ex.sentence }</li>
+		               					</ul>
+	               					</div>
+	               					
+	               					</c:forEach>
+	               				</c:if>
+	               			</c:forEach>
+	               			
+	               		</p>
+	               		
+               		</c:if>
+               
+               </c:if>
+               
+               
+               
+               
+               
+               
+               
        </div>
        
        <div class="col-sm-8" style="border: 1px solid black">
@@ -50,19 +119,30 @@
                <h3>Guessed letters</h3>
                 <textarea class="form-control" rows="2" id="comment"></textarea>
        </div>
-     
+      
+      
+
+       
+       
+       
+       
+       
+   </div>
+     <div class="row">
        <div class="col-sm-12">
                <div class="form-group">
                    <label for="usr">Answer:</label>
                    <input type="text" class="form-control" id="usr">
                </div>
+       </div>
+     </div>
                
-<!--        
-       	Just some test/sample data/functionality.  This is from a "getAllUsers" method in the UserDAOImpl class,
+<%-- 
+<!--        	Just some test/sample data/functionality.  This is from a "getAllUsers" method in the UserDAOImpl class,
        		which was called from the MainController class.  This routes to the "index.jsp" from MainController 
        		because its index() method is configured to handle all default "/" or "home.do" URLs
-       			- "localhost:8675" or "localhost:8675/home.do"
- -->       			
+       			- "localhost:8675" or "localhost:8675/home.do" -->
+
 			<c:if test="${not empty users}">
 		   		<c:forEach var="user" items="${users}">
 		   			<div>
@@ -71,9 +151,9 @@
 		   					<li>Password: ${user.password}</li>
 		   					<li>Total Points: ${user.totalPoints}</li>
 		   					<li>Preferred Model Color: 
-		   					<!--  
-		   						Basically if/else statements
-		   					-->
+   					  
+				<!--    Basically if/else statements   --> 
+  					
 		   						<c:choose>
 		   							<c:when test="${user.preferredModelColor == null}">
 		   								NULL, so the default value should be used
@@ -96,9 +176,8 @@
 		   				</ul>
 		   			</div>
 		   		</c:forEach>
-			</c:if>
-       </div>  
-     </div>
+			</c:if>  
+--%>
     </div>
 </body>
 </html>

@@ -37,9 +37,9 @@ public class MainController {
 	}
 	
 	// Test for getting a random word
-	@RequestMapping(path = "getWord.do", method = RequestMethod.GET)
+	@RequestMapping(path = {"test","getWord.do"}, method = RequestMethod.GET)
 	public ModelAndView getWord() {
-		ModelAndView mv = new ModelAndView("index");
+		ModelAndView mv = new ModelAndView("test");
 		long count = wordDAO.getWordCount();
 		int random = (int)Math.round(Math.random() * count + 1);
 		

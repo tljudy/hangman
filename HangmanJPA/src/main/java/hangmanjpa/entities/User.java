@@ -153,7 +153,7 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password=" + password + ", totalPoints=" + totalPoints
+		return "User [id=" + id + ", username=" + username + ", totalPoints=" + totalPoints
 				+ ", preferredModelColor=" + preferredModelColor + ", preferredDifficulty=" + preferredDifficulty + "]";
 	}
 }

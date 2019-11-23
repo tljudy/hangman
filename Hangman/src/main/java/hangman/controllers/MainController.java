@@ -1,6 +1,7 @@
 package hangman.controllers;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,9 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import hangman.data.DefinitionDAO;
-import hangman.data.Scraper;
+import hangman.data.SecretQuestionDAO;
 import hangman.data.UserDAO;
 import hangman.data.WordDAO;
+import hangmanjpa.entities.SecretQuestion;
 import hangmanjpa.entities.Word;
 
 @RestController
@@ -19,11 +21,11 @@ public class MainController {
 	@Autowired
 	private UserDAO user;
 	@Autowired
-	private Scraper sc;
-	@Autowired
 	private WordDAO wordDAO;
 	@Autowired
 	private DefinitionDAO defDAO;
+	@Autowired
+	private SecretQuestionDAO qDAO;
 
 	@RequestMapping(path = { "/", "home.do" }, method = RequestMethod.GET)
 	public ModelAndView index() throws IOException {
@@ -47,6 +49,7 @@ public class MainController {
 		w.setDefinitions(defDAO.getWordDefinitions(w));
 		
 		mv.addObject("word", w);
+		mv.addObject("questions", qDAO.getAllSecretQuestions());
 		
 		return mv;
 	}

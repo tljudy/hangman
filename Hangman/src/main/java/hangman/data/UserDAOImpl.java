@@ -3,18 +3,24 @@ package hangman.data;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hangmanjpa.entities.User;
+import hangmanjpa.entities.UserSecretQuestion;
 
 @Transactional
 @Service
 public class UserDAOImpl implements UserDAO {
 	@PersistenceContext
 	private EntityManager em;
+	
+	@Autowired
+	SecretQuestionDAO ansDAO;
 	
 	@Override
 	public User getUserById(int id) {
@@ -26,7 +32,7 @@ public class UserDAOImpl implements UserDAO {
 		if (username == null) return null;
 		
 		User user = null;
-		String query = "SELECT u FROM User u WHERE u.username = :email";
+		String query = "SELECT u FROM User u WHERE u.username = :username";
 		
 		try {
 			user = em.createQuery(query, User.class).setParameter("username", username).getSingleResult();
@@ -40,6 +46,46 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public List<User> getAllUsers(){
 		return em.createQuery("SELECT u FROM User u", User.class).getResultList();
+	}
+	
+	@Override
+	public User addUser(UserDTO userDTO) {
+		if (userDTO == null || userDTO.getUsername() == null) return null;
+		
+		User user = null;
+		
+		try{
+			user = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
+				.setParameter("username", userDTO.getUsername())
+				.getSingleResult();
+		}catch (NoResultException e) {
+			
+			user = new User();
+			user.setUsername(userDTO.getUsername());
+			user.setPassword(userDTO.getPassword());
+			
+			System.out.println(user);
+			
+			em.persist(user);
+			em.flush();
+			
+			System.out.println(user);
+
+			UserSecretQuestion ans = ansDAO.addUserAnswer(user.getId(), userDTO.getQuestions1(), userDTO.getAnswer1());
+			user.addUserSecretQuestions(ans);
+			
+			if (userDTO.getAnswer2() != null && userDTO.getAnswer2().trim() != "" && userDTO.getQuestions2() > 0) {
+				ans = ansDAO.addUserAnswer(user.getId(), userDTO.getQuestions2(), userDTO.getAnswer2());
+				user.addUserSecretQuestions(ans);
+			}
+			if (userDTO.getAnswer3() != null && userDTO.getAnswer3().trim() != "" && userDTO.getQuestions3() > 0) {
+				ans = ansDAO.addUserAnswer(user.getId(), userDTO.getQuestions3(), userDTO.getAnswer3());
+				user.addUserSecretQuestions(ans);
+			}
+			
+		}
+		
+		return user;
 	}
 
 }

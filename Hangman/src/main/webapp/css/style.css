@@ -1,0 +1,24 @@
+.dropdown-menu {
+	position: fixed !important;
+	top: 50% !important;
+	left: 50% !important;
+	transform: translate(-50%, -50%) !important;
+}
+
+.input-group {
+	padding: 20px;
+	margin-left: 0px;
+}
+
+.pad {
+	margin-top: 30px;
+}
+
+.center, h3, h4 {
+	text-align: center
+}
+
+.input-group > label, input, select {
+	margin-top: 10px;
+}
+

@@ -21,7 +21,7 @@ public class AuthorizationController {
 
 	@RequestMapping(path = { "Login.do" }, method = RequestMethod.POST)
 	public ModelAndView login(@RequestParam String username, @RequestParam String password, HttpSession session) {
-		ModelAndView mv = new ModelAndView("redirect:test");
+		ModelAndView mv = new ModelAndView("test");
 		User user = dao.findUserByUsername(username);
 		String loginFail = "Invalid username and/or password";
 
@@ -29,9 +29,11 @@ public class AuthorizationController {
 			if (username.equals(user.getUsername()) && password.equals(user.getPassword())) {
 				session.setAttribute("user", user);
 			} else {
+				// send login fail message
 				mv.addObject("loginFail", loginFail);
 			}
 		} catch (NullPointerException e) {
+			// send login fail message
 			mv.addObject("loginFail", loginFail);
 		}
 		return mv;
@@ -39,7 +41,7 @@ public class AuthorizationController {
 
 	@RequestMapping(path = { "CreateAccount.do" }, method = RequestMethod.POST)
 	public ModelAndView createUser(UserDTO userDTO, HttpSession session) {
-		ModelAndView mv = new ModelAndView("redirect:test");
+		ModelAndView mv = new ModelAndView("test");
 		User user = dao.findUserByUsername(userDTO.getUsername());
 
 		if (user != null || userDTO.getUsername() == null || userDTO.getPassword() == null || userDTO.getAnswer1() == null) {
@@ -53,7 +55,7 @@ public class AuthorizationController {
 
 	@RequestMapping(path = { "logout.do" }, method = RequestMethod.GET)
 	public ModelAndView userDisplay(HttpSession session) {
-		ModelAndView mv = new ModelAndView("redirect:home.do");
+		ModelAndView mv = new ModelAndView("redirect:test");
 		session.invalidate();
 		return mv;
 	}

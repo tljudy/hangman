@@ -9,6 +9,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import hangmanjpa.entities.Definition;
 import hangmanjpa.entities.Example;
@@ -28,6 +29,7 @@ public class Scraper {
 	private int syllables;
 	private String partOfSpeech;
 	private String word;
+	private String variation;
 
 	public Word Scrape(String word) {
 		this.word = word;
@@ -49,21 +51,43 @@ public class Scraper {
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
+		
+		// Get the variation of the word that dictionary.com prefers (so that the syllable counts match)
+		variation = doc.getElementsByTag("h1").text().toLowerCase().trim(); 
+		Word v = wordDAO.findWordByName(variation);
+		
+		// Word is already in the DB
+		if (v != null) {
+			return v;
+		}
+		
+		if (variation.contains(" ")) return null;  // Word variation contains multiple words (i.e. "time out")
+		
+		partOfSpeech = doc.getElementsByClass("e1hk9ate1").first().text().split(",")[0];
+		if (partOfSpeech.contentEquals("n.")) partOfSpeech = "noun";
 
 		// Count syllables
 		Elements syllablesParent = doc.getElementsByClass("evh0tcl2");
+		if (syllablesParent == null || syllablesParent.size() == 0) return null; // No syllables = don't bother
+		
 		String syls = syllablesParent.first().text().split(";")[0];
 		String s = syls.split(" or ")[0];
 		syllables = s.split(",")[0].split("-").length;
 
 		// Stage a new word for the database
 		Word newWord = new Word();
-		newWord.setWord(word.toLowerCase());
+		newWord.setWord(variation.toLowerCase());
 		newWord.setSyllables(syllables);
 		newWord.setDifficulty(newWord.determineDifficulty());
 
 		// Persist the word into the database
-		newWord = wordDAO.addWord(newWord);
+		try {
+			newWord = wordDAO.addWord(newWord);
+		} catch (Exception e) {
+			// Word's variation from dictionary.com already exists in DB
+			e.printStackTrace();
+			return null;
+		}
 
 		// Definitions are lumped inside a div: "e1hk9ate4"
 		Element row = doc.getElementsByClass("e1hk9ate4").first();
@@ -125,7 +149,7 @@ public class Scraper {
 		d.setPartOfSpeech(partOfSpeech);
 		d.setWord(newWord);
 
-		if (d.getDefinition().toLowerCase().contains(word)) {
+		if (d.getDefinition().toLowerCase().contains(word) || d.getDefinition().toLowerCase().contains(variation)) {
 			d.setDefinition(d.getDefinition().replaceAll("(?i)" + word, getUnderscores()));
 		}
 
@@ -148,6 +172,7 @@ public class Scraper {
 	private Example addExampleToDef(Definition def, Example ex) {
 		if (ex.getSentence().toLowerCase().contains(word)) {
 			ex.setSentence(ex.getSentence().replaceAll("(?i)" + word, getUnderscores()));
+			ex.setSentence(ex.getSentence().replaceAll("(?i)" + variation, getUnderscores()));
 		}
 
 		ex.setDefinition(def);
@@ -166,5 +191,4 @@ public class Scraper {
 
 		return sb.toString();
 	}
-	
 }

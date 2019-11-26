@@ -30,16 +30,36 @@
 				<li><a href="#">Preferences</a></li>
 				<li><a href="#">Leaderboard</a></li>
 			</ul>
-			<div class="row">
-				<ul class="nav navbar-nav navbar-right">
+				<div class="nav navbar-right">
 					<c:choose>
 						<c:when test="${ empty user }">
-							<li><a href="#"><span class="glyphicon glyphicon-log-in"></span>
-									Login</a></li>
+							<div class="dropdown">
+								<a class="glyphicon glyphicon-user dropdown-toggle" id="login"
+									data-toggle="dropdown" aria-haspopup="true"
+									aria-expanded="false"> Login</a>
+								<div class="dropdown-menu">
+									<form action="Login.do" method="POST" class="px-4 py-3" >
+										<h3>Login</h3>
+										<hr>
+										<div class="input-group border">
+											<div class="loginFail">${loginFail }</div>
+											<label for="username">Username</label> <input
+												name="username" type="text" class="form-control"
+												aria-label="Text input with radio button"> <br>
+											<label for="password">Password</label> <input
+												name="password" type="password" class="form-control"
+												aria-label="Text input with radio button"> <br>
+										</div>
+										<div class="pad center">
+											<button type="submit" class="btn btn-primary">Submit</button>
+										</div>		
+									</form>
+								</div>
+							</div>
 							<div class="dropdown">
 								<a class="glyphicon glyphicon-user dropdown-toggle" id="signUp"
 									data-toggle="dropdown" aria-haspopup="true"
-									aria-expanded="false">Sign Up</a>
+									aria-expanded="false"> Sign-Up</a>
 								<div class="dropdown-menu">
 									<form action="CreateAccount.do" method="POST" class="px-4 py-3" modelAttribute="userDTO">
 										<h3>Create New Account</h3>
@@ -96,11 +116,11 @@
 						</c:when>
 
 						<c:otherwise>
-							<li><a href="#"><span class="glyphicon glyphicon-user"></span>${ user.name }</a></li>
+							<li><a href="#"><span class="glyphicon glyphicon-user"></span> ${ user.username }</a></li>
+							<li><a href="logout.do"><span class="glyphicon glyphicon-user"></span> Logout</a></li>
 						</c:otherwise>
 					</c:choose>
-				</ul>
-			</div>
+				</div>
 		</div>
 	</nav>
 
@@ -131,12 +151,12 @@
 				<c:if test="${ not empty word }">
 
 					<p>
-					<h1 style="font: underline">Word: ${word.word }</h1>
-					<ul>
-						<li>ID: ${word.id }</li>
-						<li>Difficulty: ${word.difficulty }</li>
-						<li>Syllables: ${word.syllables }</li>
-					</ul>
+						<h1 style="font: underline">Word: ${word.word }</h1>
+						<ul>
+							<li>ID: ${word.id }</li>
+							<li>Difficulty: ${word.difficulty }</li>
+							<li>Syllables: ${word.syllables }</li>
+						</ul>
 					</p>
 
 					<c:if test="${ not empty word.definitions }">

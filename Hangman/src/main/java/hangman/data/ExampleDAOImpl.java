@@ -46,5 +46,12 @@ public class ExampleDAOImpl implements ExampleDAO {
 		em.flush();
 		return ex;
 	}
+	
+	@Override
+	public void deleteExample(Example ex) {
+		ex = this.getExampleById(ex.getId());
+		em.remove(ex);
+		em.flush();
+	}
 
 }

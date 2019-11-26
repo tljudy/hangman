@@ -148,7 +148,7 @@ public class Word {
 	@Override
 	public String toString() {
 		return "Word [id=" + id + ", word=" + word + ", difficulty=" + difficulty + ", syllables=" + syllables
-				+ ", definitions=" + definitions + "]";
+				+ "]";
 	}
 
 }

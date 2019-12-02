@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import hangman.data.DefinitionDAO;
-import hangman.data.ExampleDAO;
 import hangman.data.Scraper;
 import hangman.data.SecretQuestionDAO;
 import hangman.data.UserDAO;
@@ -26,23 +25,18 @@ public class MainController {
 	private DefinitionDAO defDAO;
 	@Autowired
 	private SecretQuestionDAO qDAO;
-	@Autowired
-	private Scraper sc;
 
 	@RequestMapping(path = { "/", "home.do" }, method = RequestMethod.GET)
 	public ModelAndView index() throws IOException {
 		ModelAndView mv = new ModelAndView("index");
 
-		// just temporary to display some test db data
-		mv.addObject("users", user.getAllUsers());
-
+		mv.addObject("questions", qDAO.getAllSecretQuestions());
 		return mv;
 	}
 
-	// Test for getting a random word
-	@RequestMapping(path = { "test", "getWord.do" }, method = RequestMethod.GET)
+	@RequestMapping(path = { "getWord.do" }, method = RequestMethod.GET)
 	public ModelAndView getWord() throws IOException {
-		ModelAndView mv = new ModelAndView("test");
+		ModelAndView mv = new ModelAndView("index");
 		long count = wordDAO.getWordCount();
 		
 		Word w = null;
@@ -59,5 +53,12 @@ public class MainController {
 
 		return mv;
 	}
+	
+	@RequestMapping(path = "about", method = RequestMethod.GET)
+	public ModelAndView about() {
+		return new ModelAndView("about");
+	}
+	
+	
 
 }

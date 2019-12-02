@@ -64,13 +64,9 @@ public class UserDAOImpl implements UserDAO {
 			user.setUsername(userDTO.getUsername());
 			user.setPassword(userDTO.getPassword());
 			
-			System.out.println(user);
-			
 			em.persist(user);
 			em.flush();
 			
-			System.out.println(user);
-
 			UserSecretQuestion ans = ansDAO.addUserAnswer(user.getId(), userDTO.getQuestions1(), userDTO.getAnswer1());
 			user.addUserSecretQuestions(ans);
 			

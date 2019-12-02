@@ -73,3 +73,12 @@ nav {
  footer a {
      float: right;
  }
+ 
+ .hint{
+ 	padding: 5px;
+ 	padding-left: 25px;
+ }
+ 
+ .hint a {
+ 	margin-left: 30px;
+ }

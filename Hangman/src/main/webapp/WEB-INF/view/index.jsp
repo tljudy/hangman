@@ -107,10 +107,9 @@
 		             
 		            </div>
 		      
-		          </div>
-		        </div> 
-		        <!-- end sign up button-->
-		</div>
+	          </div>
+        </div> 
+        <!-- end sign up button-->
 	</c:when>
 	
 	<c:otherwise>
@@ -135,20 +134,26 @@
     
    
        <section> 
-       <div class="hint" style="border: 1px solid black">
-               <h3>Word Hint:</h3>
-               
-               
-               
-					      <!--  
-					      
-					      if logged in, show "buy hint" button, otherwise display message to log in
-					      
-					      -->
-               
-               
-               
-       </div>
+	       <div class="hint" style="border: 1px solid black">
+	       		<c:choose>
+		       		<c:when test="${empty user }">
+		       			<form action="getWordByDifficulty.do" method="GET" >
+			       			<label for="difficulty">Choose Difficulty</label>
+			       			<select name="difficulty">
+			       				<option value="easy" ${ difficulty == 'easy' ? 'selected' : ''}>Easy</option>
+			       				<option value="medium" ${ difficulty == 'medium' ? 'selected' : ''}>Medium</option>
+			       				<option value="hard" ${ difficulty == 'hard' ? 'selected' : ''}>Hard</option>
+			       			</select>
+		       				<button class="w3-button w3-round w3-tiny w3-khaki w3-padding-small" type="submit">New Game!</button>
+		       			</form>
+		       		</c:when>
+		       		<c:otherwise>
+		               <h3>Word Hint:</h3>
+		       		
+		       		
+		       		</c:otherwise>
+	            </c:choose>
+	      </div>
       </section>
 
        <div class="flex-container">  
@@ -162,6 +167,9 @@
       <section class="guess-container">
        <div class="guesses" style="border: 1px solid black">      
                <h3>Guessed letters</h3>
+               <c:if test="${not empty word }">${word }
+               
+               </c:if>
                
        </div>
       </section>

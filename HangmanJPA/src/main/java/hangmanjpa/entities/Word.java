@@ -60,10 +60,10 @@ public class Word {
 
 	public String determineDifficulty() {
 		return syllables < 4 
-				? "Easy" 
+				? "easy" 
 						: syllables <= 6
-						? "Medium" 
-								: "Hard";
+						? "medium" 
+								: "hard";
 	}
 
 	public void setDifficulty(String difficulty) {

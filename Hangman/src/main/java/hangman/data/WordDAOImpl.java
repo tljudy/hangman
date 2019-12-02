@@ -45,8 +45,18 @@ public class WordDAOImpl implements WordDAO {
 	}
 	
 	@Override
+	public List<Word> getAllByDifficulty(String difficulty) {
+		return em.createQuery("SELECT w FROM Word w WHERE w.difficulty = :difficulty", Word.class).setParameter("difficulty", difficulty).getResultList();
+	}
+	
+	@Override
 	public long getWordCount() {
 		return (long)em.createQuery("SELECT COUNT(w.id) FROM Word w").getSingleResult();
+	}
+	
+	@Override
+	public long getWordCountByDifficulty(String difficulty) {
+		return (long)em.createQuery("SELECT COUNT(w.id) FROM Word w WHERE w.difficulty = :difficulty").setParameter("difficulty", difficulty).getSingleResult();
 	}
 	
 	@Override

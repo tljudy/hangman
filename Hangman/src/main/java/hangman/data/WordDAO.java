@@ -11,4 +11,6 @@ public interface WordDAO {
 	Word addWord(Word word);
 	boolean updateWord(Word word);
 	long getWordCount();
+	long getWordCountByDifficulty(String difficulty);
+	List<Word> getAllByDifficulty(String difficulty);
 }

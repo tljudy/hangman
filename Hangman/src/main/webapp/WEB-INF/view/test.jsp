@@ -15,40 +15,39 @@
 <header class="main-header">
  <a href="/"><img src="images/logowhite.png" class="logo" title="Home"></a> 
  
-
-	<c:choose>
-		<c:when test="${ empty user }">	 
-			<div class="user-acc-options">
-			    <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-black w3-round w3-large">Login</button>
-			    <button onclick="document.getElementById('id02').style.display='block'" class="w3-button w3-black w3-round w3-large">Sign Up</button>
-			    <!-- start login button-->
-			    <div id="id01" class="w3-modal">
-			        <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
-			    
-			          <div class="w3-center"><br>
-			            <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
-			          </div>
-			    
-			          <form class="w3-container" action="Login.do" method="POST">
-			            <div class="w3-section">
-			              <label><b>Username</b></label>
-			              <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="username" required>
-			              <label><b>Password</b></label>
-			              <input class="w3-input w3-border" type="password" placeholder="Enter Password" name="password" required>
-			              <button class="w3-button w3-block w3-black w3-section w3-padding" type="submit">Login</button>
-			              
-			            </div>
-			          </form>
-			    
-			          <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
-			            <button onclick="document.getElementById('id01').style.display='none'" type="button" class="w3-button w3-red">Cancel</button>
-			           
-			          </div>
-			    
-			        </div>
+<c:choose>
+	 <c:when test="${ empty user }">
+		<div class="user-acc-options">
+		    <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-black w3-round w3-large">Login</button>
+		    <button onclick="document.getElementById('id02').style.display='block'" class="w3-button w3-black w3-round w3-large">Sign Up</button>
+		    <!-- start login button-->
+		    <div id="id01" class="w3-modal">
+		        <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+		    
+		          <div class="w3-center"><br>
+		            <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+		          </div>
+		    
+		          <form class="w3-container" action="Login.do" method="POST">
+		            <div class="w3-section">
+		              <label><b>Username</b></label>
+		              <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="username" required>
+		              <label><b>Password</b></label>
+		              <input class="w3-input w3-border" type="password" placeholder="Enter Password" name="password" required>
+		              <button class="w3-button w3-block w3-black w3-section w3-padding" type="submit">Login</button>
+		              
+		            </div>
+		          </form>
+		    
+		          <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+		            <button onclick="document.getElementById('id01').style.display='none'" type="button" class="w3-button w3-red">Cancel</button>
+		           
+		          </div>
+		    
+		        </div>
 		      </div> 
-			      <!-- end login button-->
-			      <!--start sign in button-->
+		      <!-- end login button-->
+		      <!--start sign in button-->
 		      <div id="id02" class="w3-modal">
 		          <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
 		      
@@ -68,54 +67,39 @@
 		                	<hr>
 							<h4>Select and answer at least one Secret Question</h4>
 											
-							<h3>Create New Account</h3>
-							<hr>
-							<div class="input-group border">
-								<label for="username">Username</label> <input
-									name="username" type="text" class="form-control"
-									aria-label="Text input with radio button"> <br>
-								<label for="password">Password</label> <input
-									name="password" type="password" class="form-control"
-									aria-label="Text input with radio button"> <br>
+							<label for="questions1">Question 1</label>
+							<select name="questions1" class="form-control"
+								aria-label="Text input with radio button">
+								<c:forEach var="question" items="${ questions }">
+									<option value="${ question.id }">${ question.question }</option>
+								</c:forEach>
+							</select> 
+							<input name="answer1" type="text" class="form-control"
+								aria-label="Text input with radio button"> <br>
+								
+							<label for="questions2">Question 2</label>
+							<select name="questions2" class="form-control"
+								aria-label="Text input with radio button">
+								<c:forEach var="question" items="${ questions }">
+									<option value="${ question.id }">${ question.question }</option>
+								</c:forEach>
+							</select> 
+							<input name="answer2" type="text" class="form-control"
+								aria-label="Text input with radio button"> <br>
+								
+							<label for="questions3">Question 3</label>
+							<select name="questions3" class="form-control"
+								aria-label="Text input with radio button">
+								<c:forEach var="question" items="${ questions }">
+									<option value="${ question.id }">${ question.question }</option>
+								</c:forEach>
+							</select> 
+							<input name="answer3" type="text" class="form-control"
+								aria-label="Text input with radio button"><br>
 							</div>
-									
-							<div class="input-group border">
-								<h4>Select and answer at least one
-										Secret Question</h4>
-							
-								<label for="questions1">Question 1</label>
-								<select name="questions1" class="form-control"
-									aria-label="Text input with radio button">
-									<c:forEach var="question" items="${ questions }">
-										<option value="${ question.id }">${ question.question }</option>
-									</c:forEach>
-								</select> 
-								<input name="answer1" type="text" class="form-control"
-									aria-label="Text input with radio button"> <br>
-									
-								<label for="questions2">Question 2</label>
-								<select name="questions2" class="form-control"
-									aria-label="Text input with radio button">
-									<c:forEach var="question" items="${ questions }">
-										<option value="${ question.id }">${ question.question }</option>
-									</c:forEach>
-								</select> 
-								<input name="answer2" type="text" class="form-control"
-									aria-label="Text input with radio button"> <br>
-									
-								<label for="questions3">Question 3</label>
-								<select name="questions3" class="form-control"
-									aria-label="Text input with radio button">
-									<c:forEach var="question" items="${ questions }">
-										<option value="${ question.id }">${ question.question }</option>
-									</c:forEach>
-								</select> 
-								<input name="answer3" type="text" class="form-control"
-									aria-label="Text input with radio button"><br>
-							</div>
-		                	<button class="w3-button w3-block w3-black w3-section w3-padding" type="submit">Sign up</button>
+		                <button class="w3-button w3-block w3-black w3-section w3-padding" type="submit">Sign up</button>
 		                
-		            	</div>
+		              </div>
 		            </form>
 		      
 		            <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
@@ -123,18 +107,18 @@
 		             
 		            </div>
 		      
-		          </div>
-	    	</div> 
-			        <!-- end sign up button-->
-		</c:when>
-		<c:otherwise>
-			<a class="w3-button w3-black w3-round w3-large">{ user.username }</a>
+	          </div>
+        </div> 
+        <!-- end sign up button-->
+	</c:when>
+	
+	<c:otherwise>
+		<div class="user-acc-options">
+			<a class="w3-button w3-black w3-round w3-large">${ user.username }</a>
 			<a class="w3-button w3-black w3-round w3-large" href="logout.do">Logout</a>
-		</c:otherwise>
-	</c:choose>	
-	
-	
-
+		</div>
+	</c:otherwise>
+</c:choose>
   
 <nav>   
     <div class="w3-bar w3-dark-black w3-large">

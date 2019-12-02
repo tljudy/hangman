@@ -1,3 +1,3 @@
 (function(){
-	log("test from scripts/scripts.js");
+	console.log("test from scripts/scripts.js");
 })();

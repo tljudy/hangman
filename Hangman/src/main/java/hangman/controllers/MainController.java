@@ -45,7 +45,7 @@ public class MainController {
 		Word w = null;
 
 		while (w == null) {
-			w = wordDAO.getWordById((int) Math.round(Math.random() * count + 1));
+			w = wordDAO.getWordById((int) (Math.random() * count));
 		}
 
 		w.setDefinitions(defDAO.getWordDefinitions(w));
@@ -67,7 +67,7 @@ public class MainController {
 
 		Word w = null;
 
-		w = wordDAO.getWordById(words.get((int) (Math.random() * words.size() - 1)).getId());
+		w = wordDAO.getWordById(words.get((int) (Math.random() * words.size())).getId());
 		w.setDefinitions(defDAO.getWordDefinitions(w));
 
 		mv.addObject("word", w);

@@ -159,19 +159,27 @@
        <div class="flex-container">  
        <section class="game-svg">
        <div class="game" style="border: 1px solid black">
-               <svg width="500" height="500">
-                <circle cx="250" cy="250" r="40" stroke="black" stroke-width="3" fill="black" />
+               <svg>
+                <circle cx="290" cy="125" r="40" stroke="black" stroke-width="3" fill="black" />
                </svg>
        </div>
       </section>
       <section class="guess-container">
-       <div class="guesses" style="border: 1px solid black">      
-               <h3>Guessed letters</h3>
-               <c:if test="${not empty word }">${word }
-               
-               </c:if>
-               
-       </div>
+	      <div id="guesses" style="border: 1px solid black">      
+	              <h3>Guessed letters</h3>
+	              <c:if test="${not empty word }">${word }
+	              
+	              </c:if>
+	              
+	      </div>
+	      <div id="messages" style="border: 1px solid black"> 
+	      		<h3>Messages</h3>
+	      		<div>
+	      			<c:forEach var="message" items="${messages }">
+	      				<p>${message }</p>
+	      			</c:forEach>
+	      		</div>
+	      </div>
       </section>
       
       </div>

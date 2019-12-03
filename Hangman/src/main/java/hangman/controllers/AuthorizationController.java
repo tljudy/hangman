@@ -49,6 +49,8 @@ public class AuthorizationController {
 		}
 
 		user = dao.addUser(userDTO);
+		mv.addObject("user", user);
+		
 
 		return mv;
 	}

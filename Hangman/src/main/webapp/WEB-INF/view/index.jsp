@@ -134,49 +134,72 @@
     
    
        <section> 
-	       <div class="hint" style="border: 1px solid black">
+	       <div id="hint" style="border: 1px solid black">
 	       		<c:choose>
+	       		<%-- User is not logged in -- display difficulty selection only --%> 
 		       		<c:when test="${empty user }">
-		       			<form action="getWordByDifficulty.do" method="GET" >
+		       			<form action="newGame.do" method="GET" >
 			       			<label for="difficulty">Choose Difficulty</label>
 			       			<select name="difficulty">
 			       				<option value="easy" ${ difficulty == 'easy' ? 'selected' : ''}>Easy</option>
 			       				<option value="medium" ${ difficulty == 'medium' ? 'selected' : ''}>Medium</option>
 			       				<option value="hard" ${ difficulty == 'hard' ? 'selected' : ''}>Hard</option>
 			       			</select>
-		       				<button class="w3-button w3-round w3-tiny w3-khaki w3-padding-small" type="submit">New Game!</button>
+		       				<button id="newGameButton" class="w3-button w3-round w3-tiny w3-khaki w3-padding-small" type="submit">New Game!</button>
 		       			</form>
 		       		</c:when>
+	       		<%--  User is logged in -- Show 'buy hint' button  --%>
 		       		<c:otherwise>
-		               <h3>Word Hint:</h3>
+		               <form action="newGame.do" method="GET" >
+			       			<label for="difficulty">Choose Difficulty</label>
+			       			<select name="difficulty">
+			       				<option value="easy" ${ user.preferredDifficulty == 'easy' ? 'selected' : ''}>Easy</option>
+			       				<option value="medium" ${ user.preferredDifficulty == 'medium' ? 'selected' : ''}>Medium</option>
+			       				<option value="hard" ${ user.preferredDifficulty == 'hard' ? 'selected' : ''}>Hard</option>
+			       			</select>
+		       				<button id="newGameButton" class="w3-button w3-round w3-tiny w3-khaki w3-padding-small" type="submit">New Game!</button>
+		       			</form>
 		       		
 		       		
 		       		</c:otherwise>
 	            </c:choose>
+	            <!-- Hiding this since JS is watching for key presses -->
+		      <div id="guessContainer" hidden="true";>
+		      	  <form action="guess.do" method="POST">
+			      	  <input id="guessInput" type="text" name="guess">
+					  <label for="guess">Enter your guess here!</label>	
+					  <button id="makeGuessButton" class="w3-button w3-round w3-tiny w3-khaki w3-padding-small" type="submit">Guess!</button>       	  
+		      	  </form>
+		      </div>
 	      </div>
       </section>
 
        <div class="flex-container">  
-       <section class="game-svg">
-       <div class="game" style="border: 1px solid black">
-               <svg>
-                <circle cx="290" cy="125" r="40" stroke="black" stroke-width="3" fill="black" />
-               </svg>
-       </div>
-      </section>
-      <section class="guess-container">
-	      <div id="guesses" style="border: 1px solid black">      
+	       <section id="game">
+		       <div id="game-svg">
+	               <svg>
+	                <circle cx="290" cy="125" r="40" stroke="black" stroke-width="3" fill="black" />
+	               </svg>
+		       </div>
+		       <div id="wordContainer">
+			          <span id="word">${word }</span>
+		       </div>
+	      </section>
+      <section id="guess-container">
+	      <div id="guesses">      
 	              <h3>Guessed letters</h3>
-	              <c:if test="${not empty word }">${word }
-	              
-	              </c:if>
+	              <div>
+		              	<c:forEach var="letter" items="${guesses }">
+		              		<span class="letter">${letter }</span>
+		              	</c:forEach>
+	              </div>
 	              
 	      </div>
-	      <div id="messages" style="border: 1px solid black"> 
+	      <div id="messagesContainer"> 
 	      		<h3>Messages</h3>
-	      		<div>
+	      		<div id="messages">
 	      			<c:forEach var="message" items="${messages }">
-	      				<p>${message }</p>
+	      				<div>${message }</div>
 	      			</c:forEach>
 	      		</div>
 	      </div>
@@ -184,8 +207,8 @@
       
       </div>
 
-      <section class="answer-container">
-       <div class="answer" style="border: 1px solid black">
+      <section id="answer-container">
+       <div id="answer" style="border: 1px solid black">
                <div class="form-group">
                    <label for="usr">Answer:</label>
                    <input type="text" class="form-control" id="usr">

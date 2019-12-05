@@ -25,7 +25,7 @@ public class ExampleDAOImpl implements ExampleDAO {
 	@Override
 	public List<Example> getDefinitionExamples(int definition_id) {
 		if (definition_id < 1) return null;
-		String query = "SELECT e FROM Example e WHERE e.definition_id = :definition_id";
+		String query = "SELECT e FROM Example e WHERE e.definition.id = :definition_id";
 		
 		List<Example> ex = null;
 		

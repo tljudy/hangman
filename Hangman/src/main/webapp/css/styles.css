@@ -1,113 +1,128 @@
-@import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
+@import
+	url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
 
 * {
-    box-sizing: border-box;
-    font-family: 'Raleway', sans-serif;
-    color: #97a1c1;
+	box-sizing: border-box;
+	font-family: 'Raleway', sans-serif;
+	color: #97a1c1;
 }
 
 html, body {
-    margin: 0;
-    padding: 0;
-} 
+	margin: 0;
+	padding: 0;
+}
 
-.main-header{
-    background-color: #2a2d34;
-    position: sticky;
+.main-header {
+	background-color: #2a2d34;
+	position: sticky;
 }
 
 .logo {
-    
-    position: relative;
-    margin-left: auto;
-    margin-right: auto;
-
-    width: 25%;
-    height: auto;
-    opacity: 50%;
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+	width: 25%;
+	height: auto;
+	opacity: 50%;
 }
 
 .logo:hover {
-    opacity: 100%;
+	opacity: 100%;
 }
 
 nav {
-    text-align: center;
-    
-    font-size: 1.0em;
-    font-weight: lighter;
-    
+	text-align: center;
+	font-size: 1.0em;
+	font-weight: lighter;
 }
 
- 
+.user-acc-options {
+	float: right;
+	display: block;
+	text-decoration: none;
+	padding: auto;
+	margin: 0 5%;
+}
 
- .user-acc-options {
-     float: right;
-     display: block;
-     text-decoration: none;
-     padding: auto;
-     margin: 0 5%;
- }
-
- 
-
- .flex-container {
-    
-     display: flex;
-     height: 500px;
-     width: 100%;
-     
- }
- 
- body {
-     color: black;
- }
-
- footer {
-    
-    background-color: #2a2d34;
-     
-    margin: 0;
-    padding: 0.75em;
- }
-
- footer a {
-     float: right;
- }
- 
- .hint{
- 	padding: 5px;
- 	padding-left: 25px;
- }
- 
- .hint a {
- 	margin-left: 30px;
- }
- 
- .guess-container {
- 	width: 50%;
- 	height: 100%;
- }
- 
- .guess-container h3 {
- 	text-decoration: underline;
- 	padding-left: 20px;
- }
- 
- .game-svg {
- 	width: 50%;
- 	height: 100%
- }
-
-.game, .game > svg {
+.flex-container {
+	display: flex;
+	height: 500px;
 	width: 100%;
+}
+
+body {
+	color: black;
+}
+
+footer {
+	background-color: #2a2d34;
+	margin: 0;
+	padding: 0.75em;
+}
+
+footer a {
+	float: right;
+}
+
+#hint {
+	padding: 5px;
+	padding-left: 25px;
+}
+
+#hint a {
+	margin-left: 30px;
+}
+
+#guess-container {
+	width: 50%;
 	height: 100%;
 }
 
+#guess-container h3 {
+	text-decoration: underline;
+	padding-left: 20px;
+}
+
+#game {
+	width: 50%;
+	height: 100%;
+	border: 1px solid black;
+}
+
+#game-svg{
+	width: 100%;
+	height: 85%
+}
+
+#game-svg > svg {
+	width: 100%;
+	height:100%;
+}
+
+#wordContainer {
+	width: 100%;
+	height: 15%;
+    text-align: center;
+    font-size: 250%;
+    letter-spacing: 8px;
+}
+
 #guesses {
-	height:20%;
+	height: 20%;
+	border: 1px solid black;
+}
+
+#guesses > div {
+	padding-left: 10px;
+}
+
+#messagesContainer{
+	height: 80%;
+	border: 1px solid black;
 }
 
 #messages {
-	height:80%;
+	padding-left:10px;
+	overflow: auto;
+	height: inherit;
 }

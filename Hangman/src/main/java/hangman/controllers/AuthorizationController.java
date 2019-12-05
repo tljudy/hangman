@@ -50,6 +50,7 @@ public class AuthorizationController {
 
 		user = dao.addUser(userDTO);
 		mv.addObject("user", user);
+		session.setAttribute("user", user);
 		
 
 		return mv;

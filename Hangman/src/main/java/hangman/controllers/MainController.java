@@ -3,13 +3,10 @@ package hangman.controllers;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.ArrayList;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,12 +19,13 @@ import hangman.data.SecretQuestionDAO;
 import hangman.data.UserDAO;
 import hangman.data.WordDAO;
 import hangmanjpa.entities.Definition;
+import hangmanjpa.entities.User;
 import hangmanjpa.entities.Word;
 
 @RestController
 public class MainController {
 	@Autowired
-	private UserDAO user;
+	private UserDAO userDAO;
 	@Autowired
 	private WordDAO wordDAO;
 	@Autowired
@@ -47,7 +45,6 @@ public class MainController {
 	// Random word by difficulty
 	@RequestMapping(path = { "newGame.do" }, method = RequestMethod.GET)
 	public ModelAndView newGame(String difficulty, HttpSession session) {
-		ModelAndView mv = new ModelAndView("index");
 		if (difficulty == null)
 			difficulty = "easy";
 
@@ -87,18 +84,7 @@ public class MainController {
 				session.setAttribute("guessesRemaining", 10);
 		}
 		
-		mv.addObject("word", maskWord(((Word)session.getAttribute("word")).getWord(), (ArrayList<String>)session.getAttribute("guesses")));
-		mv.addObject("difficulty", difficulty);
-		mv.addObject("questions", qDAO.getAllSecretQuestions());
-		mv.addObject("guesses", session.getAttribute("guesses"));
-		mv.addObject("messages", session.getAttribute("messages"));
-		mv.addObject("guessesRemaining", session.getAttribute("guessesRemaining"));
-		
-		if (session.getAttribute("user") != null) {
-			mv.addObject("user", session.getAttribute("user"));
-		}
-
-		return mv;
+		return populateModel(session);
 	}
 
 	// Check guess
@@ -107,9 +93,11 @@ public class MainController {
 	public ModelAndView makeGuess(@RequestBody String ltr, HttpSession session) {
 		ModelAndView mv = new ModelAndView("index");
 		String letter = ltr.split("=")[1];
-		boolean playing = (Boolean)session.getAttribute("playing");
 		
-		if (letter == null || session.getAttribute("playing") == null || !playing)
+		Boolean playing = (Boolean)session.getAttribute("playing");
+		
+		// no guess provided or no game is active
+		if (letter == null ||  playing == null || !playing)
 			return mv;
 		
 		
@@ -121,7 +109,7 @@ public class MainController {
 			messages.add("The character \"" + letter + "\" is invalid");
 			session.setAttribute("messages", messages);
 			mv.addObject("messages", session.getAttribute("messages"));
-			mv.addObject("word", ((Word)session.getAttribute("word")).getWord());
+			mv.addObject("wordString", ((Word)session.getAttribute("word")).getWord());
 			return mv;
 		}
 		
@@ -133,40 +121,27 @@ public class MainController {
 			session.setAttribute("guesses", guesses);
 			// correct guess
 			if (w.getWord().contains(letter.toLowerCase())) {
-				mv.addObject("word", maskWord(((Word)session.getAttribute("word")).getWord(), (ArrayList<String>)session.getAttribute("guesses")));
+				mv.addObject("wordString", maskWord(((Word)session.getAttribute("word")).getWord(), (ArrayList<String>)session.getAttribute("guesses")));
 				// winner
 				if (checkWin(session)) {
-					return winGame(session);
+					return endGame(session);
 				}
 			} else {
 				// incorrect guess
-				if (checkGuessesRemaining(session)) {
-					session.setAttribute("guessesRemaining", (int)session.getAttribute("guessesRemaining") - 1);
-				}else {
+				session.setAttribute("guessesRemaining", (int)session.getAttribute("guessesRemaining") - 1);
+				if (!checkGuessesRemaining(session)) {
 					// loser
-					return loseGame(session);
+					return endGame(session);
 				}
 			}
 		} else {
 		// already guessed
 			messages.add("The letter \"" + letter + "\" has already been guessed");
 			session.setAttribute("messages", messages);
-			mv.addObject("messages", session.getAttribute("messages"));
 		}
 		
-		mv.addObject("word", maskWord(((Word)session.getAttribute("word")).getWord(), (ArrayList<String>)session.getAttribute("guesses")));
-		mv.addObject("questions", qDAO.getAllSecretQuestions());
-		mv.addObject("difficulty", session.getAttribute("difficulty"));
-		mv.addObject("guesses", (ArrayList<String>)session.getAttribute("guesses"));
-		mv.addObject("guessesRemaining", session.getAttribute("guessesRemaining"));
-
 		
-		if (session.getAttribute("user") != null) {
-			mv.addObject("user", session.getAttribute("user"));
-		}
-		
-		mv.setStatus(HttpStatus.OK);
-		return mv;
+		return populateModel(session);
 	}
 
 	@RequestMapping(path = "about", method = RequestMethod.GET)
@@ -207,28 +182,81 @@ public class MainController {
 		return true;
 	}
 	
-	private ModelAndView loseGame(HttpSession session) {
+	private ModelAndView endGame(HttpSession session) {
 		ModelAndView mv = new ModelAndView("index");
 		String word = ((Word)session.getAttribute("word")).getWord();
+		int guessesRemaining = (int)session.getAttribute("guessesRemaining");
 		ArrayList<String> messages = (ArrayList<String>)session.getAttribute("messages");
-		messages.add("You lose! The word was '" + word.toUpperCase() + "'!");
-		session.setAttribute("playing", "false");
-		mv.addObject("word", word.toUpperCase());
+		User user = (User)session.getAttribute("user");
+		
+		if (guessesRemaining <= 0) {
+			messages.add("You lose! The word was '" + word.toUpperCase() + "'!");
+			
+		}else {
+			messages.add("WINNER! The word was '" + word.toUpperCase() + "'!");
+		}
+
+		if (session.getAttribute("user") != null) {
+			int points = calculatePoints(session);
+			user.setTotalPoints(user.getTotalPoints() + points);
+			user = userDAO.update(user);
+			session.setAttribute("user", user);
+			mv.addObject("user", session.getAttribute("user"));
+			
+			if (guessesRemaining <= 0) {
+				messages.add("You lost " + points + " and now have " + user.getTotalPoints() + " total points.");
+				
+			}else {
+				messages.add("You won " + points + " and now have " + user.getTotalPoints() + " total points.");
+			}
+		}
+		
+		
+		
+		session.setAttribute("playing", false);
+		mv.addObject("wordString", word.toUpperCase());
 		mv.addObject("difficulty", session.getAttribute("difficulty"));
 		
 		return mv;
 	}
 	
-	private ModelAndView winGame(HttpSession session) {
+	private ModelAndView populateModel(HttpSession session) {
 		ModelAndView mv = new ModelAndView("index");
-		String word = ((Word)session.getAttribute("word")).getWord();
-		ArrayList<String> messages = (ArrayList<String>)session.getAttribute("messages");
-		messages.add("WINNER! The word was '" + word.toUpperCase() + "'!");
-		session.setAttribute("playing", "false");
-		mv.addObject("word", word.toUpperCase());
+		mv.addObject("wordString", maskWord(((Word)session.getAttribute("word")).getWord(), (ArrayList<String>)session.getAttribute("guesses")));
+		mv.addObject("questions", qDAO.getAllSecretQuestions());
 		mv.addObject("difficulty", session.getAttribute("difficulty"));
+		mv.addObject("guesses", (ArrayList<String>)session.getAttribute("guesses"));
+		mv.addObject("guessesRemaining", session.getAttribute("guessesRemaining"));
+		
+		
+		if (session.getAttribute("user") != null) {
+			mv.addObject("user", session.getAttribute("user"));
+		}
 		
 		return mv;
+	}
+	
+	private int calculatePoints(HttpSession session) {
+		int points = 0;
+		String difficulty = (String)session.getAttribute("difficulty");
+		
+		switch (difficulty) {
+			case "hard":
+				points = 300;
+				break; 
+			case "medium":
+				points = 200;
+				break; 
+			default:
+				points = 100;
+		}
+		
+		// subtract double for a loss
+		if ((int)session.getAttribute("guessesRemaining") <= 0) {
+			points *= -2;
+		}
+		
+		return points;
 	}
 
 }

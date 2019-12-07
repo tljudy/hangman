@@ -9,4 +9,5 @@ public interface UserDAO {
 	User findUserByUsername(String username);
 	List<User> getAllUsers();
 	User addUser(UserDTO userDTO);
+	User update(User user);
 }

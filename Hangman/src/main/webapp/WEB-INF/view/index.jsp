@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -114,7 +116,7 @@
 	
 	<c:otherwise>
 		<div class="user-acc-options">
-			<a class="w3-button w3-black w3-round w3-large">${ user.username }</a>
+			<a class="w3-button w3-black w3-round w3-large">${ user.username } (${user.totalPoints})</a>
 			<a class="w3-button w3-black w3-round w3-large" href="logout.do">Logout</a>
 		</div>
 	</c:otherwise>
@@ -182,18 +184,27 @@
 	               </svg>
 		       </div>
 		       <div id="wordContainer">
-			          <span id="word">${word }</span>
+			          <span id="word">${wordString }</span>
 		       </div>
 	      </section>
-      <section id="guess-container">
+      <section id="guess-container" class="container">
 	      <div id="guesses">      
 	              <h3>Guessed letters</h3>
 	              <div>
 		              	<c:forEach var="letter" items="${guesses }">
-		              		<span class="letter">${letter }</span>
+		              		<span class="letter" 
+			              		<c:if test="${fn:containsIgnoreCase(wordString, letter) }">style="color: green"</c:if>
+			              		<c:if test="${not fn:containsIgnoreCase(wordString, letter) }">style="color: red"</c:if>
+		              		>${letter }</span>
 		              	</c:forEach>
 	              </div>
 	              
+	      </div>
+	      <div id = "guessesRemaining">
+	        <c:if test="${not empty wordString }">
+	      		<h5>${guessesRemaining } guesses left!</h5>
+      		</c:if>
+	      		
 	      </div>
 	      <div id="messagesContainer"> 
 	      		<h3>Messages</h3>

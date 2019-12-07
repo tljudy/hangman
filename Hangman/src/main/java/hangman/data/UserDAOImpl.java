@@ -83,5 +83,19 @@ public class UserDAOImpl implements UserDAO {
 		
 		return user;
 	}
+	
+	@Override
+	public User update(User user) {
+		User managed = em.find(User.class, user.getId());
+		managed.setPassword(user.getPassword());
+		managed.setPreferredDifficulty(user.getPreferredDifficulty());
+		managed.setPreferredModelColor(user.getPreferredModelColor());
+		managed.setTotalPoints(user.getTotalPoints());
+		managed.setUsername(user.getUsername());
+		em.persist(managed);
+		em.flush();
+		
+		return managed;
+	}
 
 }

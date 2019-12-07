@@ -10,7 +10,7 @@ const signUp = document.getElementById('id02');
 function makeGuess(e) {
 	const letter = String.fromCharCode(e.charCode);
 	if (puzzle) {
-		if (login == null && signUp == null || login.style.display === "none" &&
+		if (login == null && signUp == null || login.style.display == '' && signUp.style.display == '' || login.style.display === "none" &&
 				signUp.style.display === "none") {
 			input.value = letter;
 			inputBtn.click();

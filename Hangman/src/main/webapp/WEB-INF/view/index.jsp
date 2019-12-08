@@ -136,7 +136,8 @@
     
    
        <section> 
-	       <div id="hint" style="border: 1px solid black">
+	       <div id="hint" style="border: 1px solid black" class="hintContainer">
+	      	 <div>
 	       		<c:choose>
 	       		<%-- User is not logged in -- display difficulty selection only --%> 
 		       		<c:when test="${empty user }">
@@ -165,7 +166,26 @@
 		       		
 		       		</c:otherwise>
 	            </c:choose>
-	            <!-- Hiding this since JS is watching for key presses -->
+	           </div>
+	           
+	           <!-- "Buy Hint" button -->
+	           <div>
+		           <c:choose>
+		           		<c:when test="${empty user }">
+		           			<form action="">
+			       				<button id="buyHintButton" class="w3-button w3-round w3-tiny w3-khaki w3-padding-small" type="submit" disabled>Log on to purchase hints</button>
+	       					</form>
+		           		</c:when>	
+		           		<c:otherwise>
+			           		<form action="buyHint.do" method="GET" >
+			       				<button id="buyHintButton" class="w3-button w3-round w3-tiny w3-khaki w3-padding-small" type="submit">Buy a hint! (50 Points)</button>
+	       					</form>
+		           		</c:otherwise>
+		           </c:choose>
+	           </div>
+	           
+	           
+	            <!-- Hiding this since JS is watching for key presses.  Still calling click() on this button though -->
 		      <div id="guessContainer" hidden="true";>
 		      	  <form action="guess.do" method="POST">
 			      	  <input id="guessInput" type="text" name="guess">

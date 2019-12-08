@@ -19,6 +19,7 @@ import hangman.data.SecretQuestionDAO;
 import hangman.data.UserDAO;
 import hangman.data.WordDAO;
 import hangmanjpa.entities.Definition;
+import hangmanjpa.entities.Example;
 import hangmanjpa.entities.User;
 import hangmanjpa.entities.Word;
 
@@ -48,13 +49,11 @@ public class MainController {
 		if (difficulty == null)
 			difficulty = "easy";
 
-
-		// TODO: if playing == true (logged in user still has an unfinished game running), mark game as a loss and deduct points
+		// TODO: if playing == true (logged in user still has an unfinished game
+		// running), mark game as a loss and deduct points
 //		if (session.getAttribute("playing").equals("true")) {
 //
 //		}
-		
-		
 
 		List<Word> words = wordDAO.getAllByDifficulty(difficulty);
 
@@ -67,23 +66,34 @@ public class MainController {
 			d.setExamples(exDAO.getDefinitionExamples(d.getId()));
 		}
 
+		int hintsAvailable = 0;
+
+		for (Definition d : w.getDefinitions()) {
+			hintsAvailable++;
+			for (Example e : d.getExamples()) {
+				hintsAvailable++;
+			}
+		}
+
 		session.setAttribute("word", w);
 		session.setAttribute("difficulty", difficulty);
 		session.setAttribute("guesses", new ArrayList<String>());
 		session.setAttribute("playing", true);
 		session.setAttribute("messages", new ArrayList<String>());
-		
+		session.setAttribute("hintsPurchased", 0);
+		session.setAttribute("hintsAvailable", hintsAvailable);
+
 		switch (difficulty) {
-			case "hard":
-				session.setAttribute("guessesRemaining", 5);
-				break; 
-			case "medium":
-				session.setAttribute("guessesRemaining", 7);
-				break; 
-			default:
-				session.setAttribute("guessesRemaining", 10);
+		case "hard":
+			session.setAttribute("guessesRemaining", 5);
+			break;
+		case "medium":
+			session.setAttribute("guessesRemaining", 7);
+			break;
+		default:
+			session.setAttribute("guessesRemaining", 10);
 		}
-		
+
 		return populateModel(session);
 	}
 
@@ -93,26 +103,25 @@ public class MainController {
 	public ModelAndView makeGuess(@RequestBody String ltr, HttpSession session) {
 		ModelAndView mv = new ModelAndView("index");
 		String letter = ltr.split("=")[1];
-		
-		Boolean playing = (Boolean)session.getAttribute("playing");
-		
+
+		Boolean playing = (Boolean) session.getAttribute("playing");
+
 		// no guess provided or no game is active
-		if (letter == null ||  playing == null || !playing)
+		if (letter == null || playing == null || !playing)
 			return mv;
-		
-		
-		ArrayList<String> guesses = (ArrayList<String>)session.getAttribute("guesses");
-		ArrayList<String> messages = (ArrayList<String>)session.getAttribute("messages");
-		
+
+		ArrayList<String> guesses = (ArrayList<String>) session.getAttribute("guesses");
+		ArrayList<String> messages = (ArrayList<String>) session.getAttribute("messages");
+
 		// check valid guesses
 		if (!letter.matches("[a-zA-Z{1}]")) {
 			messages.add("The character \"" + letter + "\" is invalid");
 			session.setAttribute("messages", messages);
 			mv.addObject("messages", session.getAttribute("messages"));
-			mv.addObject("wordString", ((Word)session.getAttribute("word")).getWord());
+			mv.addObject("wordString", ((Word) session.getAttribute("word")).getWord());
 			return mv;
 		}
-		
+
 		Word w = (Word) session.getAttribute("word");
 
 		// letter not guessed yet
@@ -121,26 +130,26 @@ public class MainController {
 			session.setAttribute("guesses", guesses);
 			// correct guess
 			if (w.getWord().contains(letter.toLowerCase())) {
-				mv.addObject("wordString", maskWord(((Word)session.getAttribute("word")).getWord(), (ArrayList<String>)session.getAttribute("guesses")));
+				mv.addObject("wordString", maskWord(((Word) session.getAttribute("word")).getWord(),
+						(ArrayList<String>) session.getAttribute("guesses")));
 				// winner
 				if (checkWin(session)) {
 					return endGame(session);
 				}
 			} else {
 				// incorrect guess
-				session.setAttribute("guessesRemaining", (int)session.getAttribute("guessesRemaining") - 1);
+				session.setAttribute("guessesRemaining", (int) session.getAttribute("guessesRemaining") - 1);
 				if (!checkGuessesRemaining(session)) {
 					// loser
 					return endGame(session);
 				}
 			}
 		} else {
-		// already guessed
+			// already guessed
 			messages.add("The letter \"" + letter + "\" has already been guessed");
 			session.setAttribute("messages", messages);
 		}
-		
-		
+
 		return populateModel(session);
 	}
 
@@ -148,51 +157,51 @@ public class MainController {
 	public ModelAndView about() {
 		return new ModelAndView("about");
 	}
-	
+
 	private String maskWord(String word, ArrayList<String> guesses) {
 		StringBuilder masked = new StringBuilder();
 		String[] arr = word.split("");
-		
+
 		for (int i = 0; i < arr.length; i++) {
 			String letter = word.substring(i, i + 1).toUpperCase();
 			if (!guesses.contains(letter)) {
 				masked.append("_");
-			}else {
+			} else {
 				masked.append(letter);
 			}
 		}
-		
+
 		return masked.toString();
 	}
-	
+
 	private boolean checkGuessesRemaining(HttpSession session) {
-		return ((int)session.getAttribute("guessesRemaining") > 0);
+		return ((int) session.getAttribute("guessesRemaining") > 0);
 	}
-	
+
 	private boolean checkWin(HttpSession session) {
-		String word = ((Word)session.getAttribute("word")).getWord();
-		ArrayList<String> guesses = (ArrayList<String>)session.getAttribute("guesses");
-		
+		String word = ((Word) session.getAttribute("word")).getWord();
+		ArrayList<String> guesses = (ArrayList<String>) session.getAttribute("guesses");
+
 		for (int i = 0; i < word.length(); i++) {
 			if (!guesses.contains(word.substring(i, i + 1).toUpperCase())) {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	private ModelAndView endGame(HttpSession session) {
 		ModelAndView mv = new ModelAndView("index");
-		String word = ((Word)session.getAttribute("word")).getWord();
-		int guessesRemaining = (int)session.getAttribute("guessesRemaining");
-		ArrayList<String> messages = (ArrayList<String>)session.getAttribute("messages");
-		User user = (User)session.getAttribute("user");
-		
+		String word = ((Word) session.getAttribute("word")).getWord();
+		int guessesRemaining = (int) session.getAttribute("guessesRemaining");
+		ArrayList<String> messages = (ArrayList<String>) session.getAttribute("messages");
+		User user = (User) session.getAttribute("user");
+
 		if (guessesRemaining <= 0) {
 			messages.add("You lose! The word was '" + word.toUpperCase() + "'!");
-			
-		}else {
+
+		} else {
 			messages.add("WINNER! The word was '" + word.toUpperCase() + "'!");
 		}
 
@@ -202,60 +211,109 @@ public class MainController {
 			user = userDAO.update(user);
 			session.setAttribute("user", user);
 			mv.addObject("user", session.getAttribute("user"));
-			
+
 			if (guessesRemaining <= 0) {
 				messages.add("You lost " + points + " and now have " + user.getTotalPoints() + " total points.");
-				
-			}else {
+
+			} else {
 				messages.add("You won " + points + " and now have " + user.getTotalPoints() + " total points.");
 			}
 		}
-		
-		
-		
+
 		session.setAttribute("playing", false);
 		mv.addObject("wordString", word.toUpperCase());
 		mv.addObject("difficulty", session.getAttribute("difficulty"));
-		
+
 		return mv;
 	}
-	
+
+	@RequestMapping(path = "buyHint.do", method = RequestMethod.GET)
+	public ModelAndView buyHint(HttpSession session) {
+		if ((User)session.getAttribute("user") == null || (Word)session.getAttribute("word") == null) {
+			return new ModelAndView("index");
+		}
+		
+		ArrayList<String> messages = (ArrayList<String>) session.getAttribute("messages");
+		ModelAndView mv = populateModel(session);
+
+		int counter = 0;
+		int startAt = (int) session.getAttribute("hintsPurchased");
+
+		if (startAt <= (int) session.getAttribute("hintsAvailable")) {
+			for (Definition d : ((ArrayList<Definition>) ((Word) session.getAttribute("word")).getDefinitions())) {
+				if (counter == startAt) {
+					messages.add(""
+							+ "<div class='hint'>"
+								+ "<b>Hint Type</b>: Definition. <b>Part of Speech</b>: " + d.getPartOfSpeech()
+								+ "<div class='hint'><b>Definition</b>: " + d.getDefinition() + "</div>"
+							+ "</div>");
+					session.setAttribute("hintsPurchased", (int) session.getAttribute("hintsPurchased") + 1);
+					mv.addObject("messages", session.getAttribute("messages"));
+					return mv;
+				} else {
+					counter++;
+					for (Example ex : d.getExamples()) {
+						if (counter == startAt) {
+							messages.add(""
+									+ "<div class='hint'>"
+										+ "<b>Hint Type</b>: Example Sentence. "
+										+ "<div class='hint'><b>Sentence</b>: " + ex.getSentence() + "</div>"
+									+ "</div>");
+							session.setAttribute("hintsPurchased", (int) session.getAttribute("hintsPurchased") + 1);
+							mv.addObject("messages", session.getAttribute("messages"));
+							return mv;
+						} else {
+							counter++;
+						}
+					}
+				}
+			}
+		}else {
+			messages.add("No more hints available for purchase");
+		}
+		mv.addObject("messages", session.getAttribute("messages"));
+		return mv;
+
+	}
+
 	private ModelAndView populateModel(HttpSession session) {
 		ModelAndView mv = new ModelAndView("index");
-		mv.addObject("wordString", maskWord(((Word)session.getAttribute("word")).getWord(), (ArrayList<String>)session.getAttribute("guesses")));
+		mv.addObject("wordString", maskWord(((Word) session.getAttribute("word")).getWord(),
+				(ArrayList<String>) session.getAttribute("guesses")));
 		mv.addObject("questions", qDAO.getAllSecretQuestions());
 		mv.addObject("difficulty", session.getAttribute("difficulty"));
-		mv.addObject("guesses", (ArrayList<String>)session.getAttribute("guesses"));
+		mv.addObject("guesses", (ArrayList<String>) session.getAttribute("guesses"));
 		mv.addObject("guessesRemaining", session.getAttribute("guessesRemaining"));
-		
-		
+		mv.addObject("hintsAvailable", session.getAttribute("hintsAvailable"));
+		mv.addObject("hintsPurchased", session.getAttribute("hintsPurchased"));
+
 		if (session.getAttribute("user") != null) {
 			mv.addObject("user", session.getAttribute("user"));
 		}
-		
+
 		return mv;
 	}
-	
+
 	private int calculatePoints(HttpSession session) {
 		int points = 0;
-		String difficulty = (String)session.getAttribute("difficulty");
-		
+		String difficulty = (String) session.getAttribute("difficulty");
+
 		switch (difficulty) {
-			case "hard":
-				points = 300;
-				break; 
-			case "medium":
-				points = 200;
-				break; 
-			default:
-				points = 100;
+		case "hard":
+			points = 300;
+			break;
+		case "medium":
+			points = 200;
+			break;
+		default:
+			points = 100;
 		}
-		
+
 		// subtract double for a loss
-		if ((int)session.getAttribute("guessesRemaining") <= 0) {
+		if ((int) session.getAttribute("guessesRemaining") <= 0) {
 			points *= -2;
 		}
-		
+
 		return points;
 	}
 

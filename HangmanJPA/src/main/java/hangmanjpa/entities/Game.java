@@ -2,6 +2,7 @@ package hangmanjpa.entities;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,8 +16,12 @@ public class Game {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
+	// Database column names are gameWon/pointsAwarded/gameDate, but JPA does not like caps I guess
+	@Column(name="gamewon")
 	private boolean gameWon;
+	@Column(name="pointsawarded")
 	private int pointsAwarded;
+	@Column(name="gamedate")
 	private Date gameDate;
 
 	@ManyToOne

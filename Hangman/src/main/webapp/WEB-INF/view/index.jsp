@@ -123,13 +123,130 @@
 </c:choose>
   
 <nav>   
-    <div class="w3-bar w3-dark-black w3-large">
-        <a href="#" class="w3-bar-item w3-button w3-mobile w3-hover-none w3-text-grey w3-hover-text-white" style="width:33%">Account</a>
-        <a href="#" class="w3-bar-item w3-button w3-mobile w3-hover-none w3-text-grey w3-hover-text-white" style="width:33%">Leaderboads</a>
-        <a href="#" class="w3-bar-item w3-button w3-mobile w3-hover-none w3-text-grey w3-hover-text-white" style="width:33%">Preferences</a>
-      </div>
-  
+	<c:if test="${not empty user }">
+		<div class="w3-bar w3-dark-black w3-large">
+	        <button onclick="document.getElementById('acc').style.display='block'"
+	        class="w3-button w3-mobile" style="width:33%" >Account</button>
+	        <div id="acc" class="w3-modal" >
+	          <div class="w3-container">
+	          <div class="w3-modal-content">
+	              <div class="w3-section">
+	                  <label>Username:</label>
+	                  <p></p>
+	                  <label>Games played:</label>
+	                </div>
+	              <div class="w3-section">
+	                  <label>Game History:</label>
+	                  <table class="w3-table w3-bordered">
+	                      <tr>
+	                          <th>W0rd</th>
+	                          <th>Points</th>
+	                          <th>Difficulty</th>
+	                        </tr>
+	                        <tr>
+	                            <td>hello</td>
+	                            <td>1000</td>
+	                            <td>S+</td>
+	                          </tr>
+	    
+	                          <tr>
+	                              <td>evolution</td>
+	                              <td>850</td>
+	                              <td>A</td>
+	                            </tr>
+	    
+	                            <tr>
+	                                <td>synchronize</td>
+	                                <td>500</td>
+	                                <td>C</td>
+	                              </tr>
+	                  </table>
+	              </div>
+	            
+	          
+	                
+	                <div class="w3-section">
+	                    <button class="w3-button w3-yellow">Reset Account</button>
+	                    <button class="w3-button w3-red">Delete Account</button>
+	                </div>
+	                <div class="w3-container w3-padding-16 w3-light-grey">
+	                    <button onclick="document.getElementById('acc').style.display='none'" type="button" class="w3-button w3-grey">Return to game</button>
+	                   
+	                  </div>
+	                </div>
+	              </div>
+	          </div>
+	          
+	        </div>
 
+	</c:if>
+          <button onclick="document.getElementById('ldr').style.display='block'"
+        class="w3-button w3-mobile" style="width:33%">Leaderboards</button>
+        <div id="ldr" class="w3-modal" >
+          <div class="w3-modal-content">
+              <table class="w3-table w3-bordered">
+                  <tr>
+                      <th>Username</th>
+                      <th>Points</th>
+                      <th>Difficulty</th>
+                    </tr>
+                    <tr>
+                        <td>Jill</td>
+                        <td>1000</td>
+                        <td>S+</td>
+                      </tr>
+
+                      <tr>
+                          <td>Bob</td>
+                          <td>850</td>
+                          <td>A</td>
+                        </tr>
+
+                        <tr>
+                            <td>Jay</td>
+                            <td>500</td>
+                            <td>C</td>
+                          </tr>
+              </table>
+              <div class="w3-container w3-padding-16 w3-light-grey">
+                  <button onclick="document.getElementById('ldr').style.display='none'" type="button" class="w3-button w3-grey">Return to game</button>
+                 
+                </div>
+              </div>
+              
+          </div>
+
+	<c:if test="${not empty user }">
+        <button onclick="document.getElementById('pref').style.display='block'"
+        class="w3-button w3-mobile" style="width:33%">Preferences</button>
+        <div id="pref" class="w3-modal">
+          <div class="w3-modal-content">
+              <div class="w3-container" action="#default">
+                  <div class="w3-section">
+                      <input class="w3-check" type="checkbox">
+                      <label>Hints</label>
+                    </div>
+                    <div class="w3-section">
+                        <label><b>Select number of guesses allowed:</b></label>
+                        <select class="w3-select w3-border w3-margin-bottom" name="option">
+                            <option value="" disabled selected>10</option>
+                            <option value="1">9</option>
+                            <option value="2">8</option>
+                            <option value="3">7</option>
+                            <option value="4">6</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <div class="w3-container w3-padding-16 w3-light-grey">
+                        <button onclick="document.getElementById('pref').style.display='none'" type="button" class="w3-button w3-grey">Return to game</button>
+                       
+                      </div>
+                </div>
+              </div>
+          </div>
+        
+       </c:if>
+      </div>
 </nav>
 </header>
     
@@ -156,7 +273,7 @@
 		               <form action="newGame.do" method="GET" >
 			       			<label for="difficulty">Choose Difficulty</label>
 			       			<select name="difficulty">
-			       				<option value="easy" ${ user.preferredDifficulty == 'easy' ? 'selected' : ''}>Easy</option>
+			       				<option value="easy" ${ user.preferredDifficulty == 'easy'  ? 'selected' : ''}>Easy</option>
 			       				<option value="medium" ${ user.preferredDifficulty == 'medium' ? 'selected' : ''}>Medium</option>
 			       				<option value="hard" ${ user.preferredDifficulty == 'hard' ? 'selected' : ''}>Hard</option>
 			       			</select>
@@ -178,7 +295,14 @@
 		           		</c:when>	
 		           		<c:otherwise>
 			           		<form action="buyHint.do" method="GET" >
-			       				<button id="buyHintButton" class="w3-button w3-round w3-tiny w3-khaki w3-padding-small" type="submit">Buy a hint! (50 Points)</button>
+			           			<c:choose>
+			           				<c:when test="${hintsAvailable > hintsPurchased && not empty word}">
+			       						<button id="buyHintButton" class="w3-button w3-round w3-tiny w3-khaki w3-padding-small" type="submit">Buy a hint! (50 Points)</button>
+		       						</c:when>
+		       						<c:otherwise>
+			       						<button id="buyHintButton" class="w3-button w3-round w3-tiny w3-khaki w3-padding-small" disabled>No hints available</button>
+		       						</c:otherwise>
+	       						</c:choose>
 	       					</form>
 		           		</c:otherwise>
 		           </c:choose>

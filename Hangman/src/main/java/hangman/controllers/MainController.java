@@ -15,11 +15,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import hangman.data.DefinitionDAO;
 import hangman.data.ExampleDAO;
+import hangman.data.GameDAO;
 import hangman.data.SecretQuestionDAO;
 import hangman.data.UserDAO;
 import hangman.data.WordDAO;
 import hangmanjpa.entities.Definition;
 import hangmanjpa.entities.Example;
+import hangmanjpa.entities.Game;
 import hangmanjpa.entities.User;
 import hangmanjpa.entities.Word;
 
@@ -27,6 +29,8 @@ import hangmanjpa.entities.Word;
 public class MainController {
 	@Autowired
 	private UserDAO userDAO;
+	@Autowired
+	private GameDAO gameDAO;
 	@Autowired
 	private WordDAO wordDAO;
 	@Autowired
@@ -102,7 +106,12 @@ public class MainController {
 	@RequestMapping(path = { "guess.do" })
 	public ModelAndView makeGuess(@RequestBody String ltr, HttpSession session) {
 		ModelAndView mv = new ModelAndView("index");
-		String letter = ltr.split("=")[1];
+		String letter = null;
+		
+		if (ltr == null || ltr.split("=").length < 2) {
+			return mv;
+		}
+		letter = ltr.split("=")[1];
 
 		Boolean playing = (Boolean) session.getAttribute("playing");
 
@@ -114,7 +123,7 @@ public class MainController {
 		ArrayList<String> messages = (ArrayList<String>) session.getAttribute("messages");
 
 		// check valid guesses
-		if (!letter.matches("[a-zA-Z{1}]")) {
+		if (!letter.matches("[a-zA-Z]{1}")) {
 			messages.add("The character \"" + letter + "\" is invalid");
 			session.setAttribute("messages", messages);
 			mv.addObject("messages", session.getAttribute("messages"));
@@ -165,7 +174,11 @@ public class MainController {
 		for (int i = 0; i < arr.length; i++) {
 			String letter = word.substring(i, i + 1).toUpperCase();
 			if (!guesses.contains(letter)) {
-				masked.append("_");
+				if (letter.equals("-")) {
+					masked.append("-");
+				}else {
+					masked.append("_");
+				}
 			} else {
 				masked.append(letter);
 			}
@@ -211,14 +224,23 @@ public class MainController {
 			user = userDAO.update(user);
 			session.setAttribute("user", user);
 			mv.addObject("user", session.getAttribute("user"));
+			
+			Game game = new Game();
+			game.setPointsAwarded(points);
+			game.setUser(user);
+			game.setWord((Word) session.getAttribute("word"));
 
 			if (guessesRemaining <= 0) {
 				messages.add("You lost " + points + " and now have " + user.getTotalPoints() + " total points.");
-
+				game.setGameWon(false);
 			} else {
 				messages.add("You won " + points + " and now have " + user.getTotalPoints() + " total points.");
+				game.setGameWon(true);
 			}
+			gameDAO.addGame(game);
 		}
+		
+		userDAO.getLeadersByPoints();
 
 		session.setAttribute("playing", false);
 		mv.addObject("wordString", word.toUpperCase());
@@ -229,38 +251,39 @@ public class MainController {
 
 	@RequestMapping(path = "buyHint.do", method = RequestMethod.GET)
 	public ModelAndView buyHint(HttpSession session) {
-		if ((User)session.getAttribute("user") == null || (Word)session.getAttribute("word") == null) {
+		if ((User) session.getAttribute("user") == null || (Word) session.getAttribute("word") == null
+				|| !(boolean) session.getAttribute("playing")) {
 			return new ModelAndView("index");
 		}
-		
+
 		ArrayList<String> messages = (ArrayList<String>) session.getAttribute("messages");
 		ModelAndView mv = populateModel(session);
+		User user = (User) session.getAttribute("user");
 
 		int counter = 0;
 		int startAt = (int) session.getAttribute("hintsPurchased");
 
-		if (startAt <= (int) session.getAttribute("hintsAvailable")) {
+		if (user.getTotalPoints() > 50 && startAt <= (int) session.getAttribute("hintsAvailable")) {
 			for (Definition d : ((ArrayList<Definition>) ((Word) session.getAttribute("word")).getDefinitions())) {
 				if (counter == startAt) {
-					messages.add(""
-							+ "<div class='hint'>"
-								+ "<b>Hint Type</b>: Definition. <b>Part of Speech</b>: " + d.getPartOfSpeech()
-								+ "<div class='hint'><b>Definition</b>: " + d.getDefinition() + "</div>"
-							+ "</div>");
+					messages.add("" + "<div class='hint'>" + "<b>Hint Type</b>: Definition. <b>Part of Speech</b>: "
+							+ d.getPartOfSpeech() + "<div class='hint'><b>Definition</b>: " + d.getDefinition()
+							+ "</div>" + "</div>");
 					session.setAttribute("hintsPurchased", (int) session.getAttribute("hintsPurchased") + 1);
 					mv.addObject("messages", session.getAttribute("messages"));
+					user.setTotalPoints(user.getTotalPoints() - 50);
+					userDAO.update(user);
 					return mv;
 				} else {
 					counter++;
 					for (Example ex : d.getExamples()) {
 						if (counter == startAt) {
-							messages.add(""
-									+ "<div class='hint'>"
-										+ "<b>Hint Type</b>: Example Sentence. "
-										+ "<div class='hint'><b>Sentence</b>: " + ex.getSentence() + "</div>"
-									+ "</div>");
+							messages.add("" + "<div class='hint'>" + "<b>Hint Type</b>: Example Sentence. "
+									+ "<div class='hint'><b>Sentence</b>: " + ex.getSentence() + "</div>" + "</div>");
 							session.setAttribute("hintsPurchased", (int) session.getAttribute("hintsPurchased") + 1);
 							mv.addObject("messages", session.getAttribute("messages"));
+							user.setTotalPoints(user.getTotalPoints() - 50);
+							userDAO.update(user);
 							return mv;
 						} else {
 							counter++;
@@ -268,8 +291,11 @@ public class MainController {
 					}
 				}
 			}
-		}else {
-			messages.add("No more hints available for purchase");
+		} else {
+			if (user.getTotalPoints() < 50) {
+				messages.add("You must have at least 50 points in order to purchase a hint");
+			} else
+				messages.add("No more hints available for purchase");
 		}
 		mv.addObject("messages", session.getAttribute("messages"));
 		return mv;

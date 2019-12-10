@@ -97,5 +97,20 @@ public class UserDAOImpl implements UserDAO {
 		
 		return managed;
 	}
+	
 
+	@Override
+	public List<User> getLeadersByPoints() {
+		String query = "SELECT u FROM User u ORDER BY u.totalPoints DESC";
+
+		List<User> users = null;
+
+		try {
+			users = em.createQuery(query, User.class).getResultList();
+		} catch (javax.persistence.NoResultException e) {
+			return null;
+		}
+
+		return users;
+	}
 }

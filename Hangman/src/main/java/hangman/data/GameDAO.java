@@ -10,5 +10,5 @@ public interface GameDAO {
 	Game addGame(Game g);
 	void deleteGame(Game g);
 	List<Game> getGamesByUserId(int id);
-	Map<String, String> getLeadersLastDay();
+	Map<String, Integer> getLeadersLastDay();
 }

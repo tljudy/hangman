@@ -215,6 +215,8 @@
             </div>
               
           </div>
+          
+          </div>
 
 	<c:if test="${not empty user }">
         <button onclick="document.getElementById('pref').style.display='block'"

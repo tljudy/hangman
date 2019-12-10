@@ -59,11 +59,11 @@ public class GameDAOImpl implements GameDAO {
 	}
 
 	@Override
-	public Map<String, String> getLeadersLastDay() {
+	public Map<String, Integer> getLeadersLastDay() {
 		String query = "SELECT g FROM Game g WHERE g.gameDate > :yesterday";
 		LocalDateTime now = LocalDateTime.now().minusDays(1);
 		List<Game> games = null;
-		Map<String, String> results = new HashMap<String, String>();
+		Map<String, Integer> results = new HashMap<String, Integer>();
 
 		try {
 			games = em.createQuery(query, Game.class).setParameter("yesterday", now)
@@ -75,7 +75,19 @@ public class GameDAOImpl implements GameDAO {
 		
 		for (Game g : games) {
 			User user = userDAO.getUserById(g.getUser().getId());
-			results.put(user.getUsername(), results.get(user.getUsername()) + g.getPointsAwarded());
+			int currentMapVal = 0; 
+			
+			try{
+				currentMapVal = results.get(user.getUsername());
+			}catch (NullPointerException e) {
+				
+			}
+			
+			if (currentMapVal == 0) {
+				results.put(user.getUsername(), g.getPointsAwarded());
+			}else {
+				results.put(user.getUsername(), currentMapVal + g.getPointsAwarded());
+			}
 		}
 
 		return results;

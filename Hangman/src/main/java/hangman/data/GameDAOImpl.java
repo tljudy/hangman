@@ -1,9 +1,6 @@
 package hangman.data;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hangmanjpa.entities.Game;
+import hangmanjpa.entities.User;
 
 @Transactional
 @Service
@@ -47,7 +45,7 @@ public class GameDAOImpl implements GameDAO {
 
 	@Override
 	public Game addGame(Game g) {
-		g.setGameDate(new Date());
+		g.setGameDate(LocalDateTime.now());
 		em.persist(g);
 		em.flush();
 		return g;
@@ -61,17 +59,14 @@ public class GameDAOImpl implements GameDAO {
 	}
 
 	@Override
-	public Map<Integer, String> getLeadersLastDay() {
+	public Map<String, String> getLeadersLastDay() {
 		String query = "SELECT g FROM Game g WHERE g.gameDate > :yesterday";
-		Calendar cal = Calendar.getInstance();
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		cal.add(Calendar.DATE, -1);
-
+		LocalDateTime now = LocalDateTime.now().minusDays(1);
 		List<Game> games = null;
-		Map<Integer, String> results = new HashMap<Integer, String>();
+		Map<String, String> results = new HashMap<String, String>();
 
 		try {
-			games = em.createQuery(query, Game.class).setParameter("yesterday", dateFormat.format(cal.getTime()))
+			games = em.createQuery(query, Game.class).setParameter("yesterday", now)
 					.getResultList();
 		} catch (javax.persistence.NoResultException e) {
 			return null;
@@ -79,8 +74,8 @@ public class GameDAOImpl implements GameDAO {
 		
 		
 		for (Game g : games) {
-			int user = g.getUser().getId();
-			results.put(user, results.get(user) + g.getPointsAwarded());
+			User user = userDAO.getUserById(g.getUser().getId());
+			results.put(user.getUsername(), results.get(user.getUsername()) + g.getPointsAwarded());
 		}
 
 		return results;

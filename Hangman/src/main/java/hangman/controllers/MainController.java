@@ -45,6 +45,7 @@ public class MainController {
 		ModelAndView mv = new ModelAndView("index");
 		mv.addObject("questions", qDAO.getAllSecretQuestions());
 		mv.addObject("leaders", userDAO.getLeadersByPoints());
+		mv.addObject("leadersLast24", gameDAO.getLeadersLastDay());
 		User user = (User)session.getAttribute("user");
 		
 		if (user != null) {
@@ -92,6 +93,8 @@ public class MainController {
 		session.setAttribute("messages", new ArrayList<String>());
 		session.setAttribute("hintsPurchased", 0);
 		session.setAttribute("hintsAvailable", hintsAvailable);
+		session.setAttribute("character", new int[10]);
+
 
 		switch (difficulty) {
 		case "hard":
@@ -113,6 +116,7 @@ public class MainController {
 	public ModelAndView makeGuess(@RequestBody String ltr, HttpSession session) {
 		ModelAndView mv = new ModelAndView("index");
 		mv.addObject("leaders", userDAO.getLeadersByPoints());
+		mv.addObject("leadersLast24", gameDAO.getLeadersLastDay());
 
 		String letter = null;
 		
@@ -156,6 +160,7 @@ public class MainController {
 			} else {
 				// incorrect guess
 				session.setAttribute("guessesRemaining", (int) session.getAttribute("guessesRemaining") - 1);
+				session.setAttribute("character", calculateCharacter(session));
 				if (!checkGuessesRemaining(session)) {
 					// loser
 					return endGame(session);
@@ -253,6 +258,7 @@ public class MainController {
 		mv.addObject("wordString", word.toUpperCase());
 		mv.addObject("difficulty", session.getAttribute("difficulty"));
 		mv.addObject("leaders", userDAO.getLeadersByPoints());
+		mv.addObject("leadersLast24", gameDAO.getLeadersLastDay());
 
 		return mv;
 	}
@@ -267,6 +273,8 @@ public class MainController {
 		ArrayList<String> messages = (ArrayList<String>) session.getAttribute("messages");
 		ModelAndView mv = populateModel(session);
 		mv.addObject("leaders", userDAO.getLeadersByPoints());
+		mv.addObject("leadersLast24", gameDAO.getLeadersLastDay());
+
 		User user = (User) session.getAttribute("user");
 
 		int counter = 0;
@@ -321,7 +329,10 @@ public class MainController {
 		mv.addObject("guessesRemaining", session.getAttribute("guessesRemaining"));
 		mv.addObject("hintsAvailable", session.getAttribute("hintsAvailable"));
 		mv.addObject("hintsPurchased", session.getAttribute("hintsPurchased"));
+		mv.addObject("character", session.getAttribute("character"));
 		mv.addObject("leaders", userDAO.getLeadersByPoints());
+		mv.addObject("leadersLast24", gameDAO.getLeadersLastDay());
+
 
 		if (session.getAttribute("user") != null) {
 			User user = (User)session.getAttribute("user");
@@ -354,5 +365,53 @@ public class MainController {
 
 		return points;
 	}
+	
+	private int[] calculateCharacter(HttpSession session) {
+		int[] nums = new int[10];
+		
+		String diff = (String)session.getAttribute("difficulty");
+		int guessesRemaining = (int)session.getAttribute("guessesRemaining");
+		
+		switch(diff) {
+			case "hard":
+				for (int i = 0; i < 10 - guessesRemaining * 2; i++) {
+					nums[i] = i + 1;
+				}
+				break;
+			case "medium":
+				switch (guessesRemaining) {
+					case 0: 
+						nums[8] = 9;
+						nums[9] = 10;
+					case 1:
+						nums[7] = 8;
+						nums[6] = 7;
+					case 2:
+						nums[5] = 6;
+					case 3: 
+						nums[4] = 5;
+					case 4:
+						nums[3] = 4;
+					case 5:
+						nums[2] = 3;
+					case 6:
+						nums[1] = 2;
+						nums[0] = 1;
+					case 7:
+				}
+				break;
+			default:
+				for (int i = 0; i < 10 - guessesRemaining; i++) {
+					nums[i] = i + 1;
+				}
+		}
+		
+		return nums;
+	}
 
 }
+
+
+
+
+

@@ -1,6 +1,6 @@
 package hangmanjpa.entities;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,7 +22,7 @@ public class Game {
 	@Column(name="pointsawarded")
 	private int pointsAwarded;
 	@Column(name="gamedate")
-	private Date gameDate;
+	private LocalDateTime gameDate;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
@@ -32,7 +32,7 @@ public class Game {
 	@JoinColumn(name = "word_id")
 	private Word word;
 
-	public Game(int id, boolean gameWon, int pointsAwarded, Date gameDate, User user, Word word) {
+	public Game(int id, boolean gameWon, int pointsAwarded, LocalDateTime gameDate, User user, Word word) {
 		this.id = id;
 		this.gameWon = gameWon;
 		this.pointsAwarded = pointsAwarded;
@@ -69,11 +69,11 @@ public class Game {
 		this.pointsAwarded = pointsAwarded;
 	}
 
-	public Date getGameDate() {
+	public LocalDateTime getGameDate() {
 		return gameDate;
 	}
 
-	public void setGameDate(Date gameDate) {
+	public void setGameDate(LocalDateTime gameDate) {
 		this.gameDate = gameDate;
 	}
 

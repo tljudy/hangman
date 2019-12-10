@@ -142,3 +142,7 @@ footer a {
 	display:flex;
 	justify-content: space-evenly;
 }
+
+#char {
+	transform: translate(10%, -20%);
+}

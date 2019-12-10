@@ -15,7 +15,7 @@
 </head>
 <body >
 <header class="main-header">
- <a href="/"><img src="images/logowhite.png" class="logo" title="Home"></a> 
+ <a href="home.do"><img src="images/logowhite.png" class="logo" title="Home"></a> 
  
 <c:choose>
 	 <c:when test="${ empty user }">
@@ -248,7 +248,6 @@
           </div>
         
        </c:if>
-      </div>
 </nav>
 </header>
     

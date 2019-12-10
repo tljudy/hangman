@@ -131,35 +131,25 @@
 	          <div class="w3-container">
 	          <div class="w3-modal-content">
 	              <div class="w3-section">
-	                  <label>Username:</label>
-	                  <p></p>
-	                  <label>Games played:</label>
+	                  <label>Username: ${user.username }</label>
 	                </div>
 	              <div class="w3-section">
 	                  <label>Game History:</label>
 	                  <table class="w3-table w3-bordered">
 	                      <tr>
-	                          <th>W0rd</th>
+	                          <th>Word</th>
 	                          <th>Points</th>
 	                          <th>Difficulty</th>
-	                        </tr>
-	                        <tr>
-	                            <td>hello</td>
-	                            <td>1000</td>
-	                            <td>S+</td>
-	                          </tr>
-	    
-	                          <tr>
-	                              <td>evolution</td>
-	                              <td>850</td>
-	                              <td>A</td>
-	                            </tr>
-	    
-	                            <tr>
-	                                <td>synchronize</td>
-	                                <td>500</td>
-	                                <td>C</td>
-	                              </tr>
+	                          <th>Date<th>
+                  		  </tr>
+	                      <c:forEach var="game" items="${history }">
+	                      		<tr>
+	                      			<td>${game.word.word}</td>
+	                      			<td>${game.pointsAwarded }</td>
+	                      			<td>${game.word.difficulty }</td>
+	                      			<td>${game.gameDate }</td>
+	                      		</tr>
+	                      </c:forEach>
 	                  </table>
 	              </div>
 	            
@@ -188,25 +178,14 @@
                   <tr>
                       <th>Username</th>
                       <th>Points</th>
-                      <th>Difficulty</th>
-                    </tr>
-                    <tr>
-                        <td>Jill</td>
-                        <td>1000</td>
-                        <td>S+</td>
-                      </tr>
-
-                      <tr>
-                          <td>Bob</td>
-                          <td>850</td>
-                          <td>A</td>
-                        </tr>
-
-                        <tr>
-                            <td>Jay</td>
-                            <td>500</td>
-                            <td>C</td>
-                          </tr>
+                  </tr>
+                  <c:forEach var="leader" items="${leaders }">
+                  	<tr>
+                  		<td>${leader.username }</td>
+                  		<td>${leader.totalPoints }</td>
+                  	</tr>
+                  </c:forEach>
+                    
               </table>
               <div class="w3-container w3-padding-16 w3-light-grey">
                   <button onclick="document.getElementById('ldr').style.display='none'" type="button" class="w3-button w3-grey">Return to game</button>

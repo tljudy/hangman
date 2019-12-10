@@ -21,7 +21,7 @@ public class AuthorizationController {
 
 	@RequestMapping(path = { "Login.do" }, method = RequestMethod.POST)
 	public ModelAndView login(@RequestParam String username, @RequestParam String password, HttpSession session) {
-		ModelAndView mv = new ModelAndView("index");
+		ModelAndView mv = new ModelAndView("redirect:home.do");
 		User user = dao.findUserByUsername(username);
 		String loginFail = "Invalid username and/or password";
 
@@ -41,7 +41,7 @@ public class AuthorizationController {
 
 	@RequestMapping(path = { "CreateAccount.do" }, method = RequestMethod.POST)
 	public ModelAndView createUser(UserDTO userDTO, HttpSession session) {
-		ModelAndView mv = new ModelAndView("index");
+		ModelAndView mv = new ModelAndView("redirect:home.do");
 		User user = dao.findUserByUsername(userDTO.getUsername());
 
 		if (user != null || userDTO.getUsername() == null || userDTO.getPassword() == null || userDTO.getAnswer1() == null) {

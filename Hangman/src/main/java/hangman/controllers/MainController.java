@@ -41,9 +41,15 @@ public class MainController {
 	private SecretQuestionDAO qDAO;
 
 	@RequestMapping(path = { "/", "home.do" }, method = RequestMethod.GET)
-	public ModelAndView index() {
+	public ModelAndView index(HttpSession session) {
 		ModelAndView mv = new ModelAndView("index");
 		mv.addObject("questions", qDAO.getAllSecretQuestions());
+		mv.addObject("leaders", userDAO.getLeadersByPoints());
+		User user = (User)session.getAttribute("user");
+		
+		if (user != null) {
+			mv.addObject("history", gameDAO.getGamesByUserId(user.getId()));
+		}
 		return mv;
 	}
 
@@ -106,6 +112,8 @@ public class MainController {
 	@RequestMapping(path = { "guess.do" })
 	public ModelAndView makeGuess(@RequestBody String ltr, HttpSession session) {
 		ModelAndView mv = new ModelAndView("index");
+		mv.addObject("leaders", userDAO.getLeadersByPoints());
+
 		String letter = null;
 		
 		if (ltr == null || ltr.split("=").length < 2) {
@@ -240,11 +248,11 @@ public class MainController {
 			gameDAO.addGame(game);
 		}
 		
-		userDAO.getLeadersByPoints();
 
 		session.setAttribute("playing", false);
 		mv.addObject("wordString", word.toUpperCase());
 		mv.addObject("difficulty", session.getAttribute("difficulty"));
+		mv.addObject("leaders", userDAO.getLeadersByPoints());
 
 		return mv;
 	}
@@ -258,6 +266,7 @@ public class MainController {
 
 		ArrayList<String> messages = (ArrayList<String>) session.getAttribute("messages");
 		ModelAndView mv = populateModel(session);
+		mv.addObject("leaders", userDAO.getLeadersByPoints());
 		User user = (User) session.getAttribute("user");
 
 		int counter = 0;
@@ -312,9 +321,12 @@ public class MainController {
 		mv.addObject("guessesRemaining", session.getAttribute("guessesRemaining"));
 		mv.addObject("hintsAvailable", session.getAttribute("hintsAvailable"));
 		mv.addObject("hintsPurchased", session.getAttribute("hintsPurchased"));
+		mv.addObject("leaders", userDAO.getLeadersByPoints());
 
 		if (session.getAttribute("user") != null) {
-			mv.addObject("user", session.getAttribute("user"));
+			User user = (User)session.getAttribute("user");
+			mv.addObject("user", user);
+			mv.addObject("history", gameDAO.getGamesByUserId(user.getId()));
 		}
 
 		return mv;

@@ -10,4 +10,5 @@ public interface UserDAO {
 	List<User> getAllUsers();
 	User addUser(UserDTO userDTO);
 	User update(User user);
+	List<User> getLeadersByPoints();
 }

@@ -1,7 +1,8 @@
 package hangmanjpa.entities;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,9 +16,13 @@ public class Game {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
+	// Database column names are gameWon/pointsAwarded/gameDate, but JPA does not like caps I guess
+	@Column(name="gamewon")
 	private boolean gameWon;
+	@Column(name="pointsawarded")
 	private int pointsAwarded;
-	private Date gameDate;
+	@Column(name="gamedate")
+	private LocalDateTime gameDate;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
@@ -27,7 +32,7 @@ public class Game {
 	@JoinColumn(name = "word_id")
 	private Word word;
 
-	public Game(int id, boolean gameWon, int pointsAwarded, Date gameDate, User user, Word word) {
+	public Game(int id, boolean gameWon, int pointsAwarded, LocalDateTime gameDate, User user, Word word) {
 		this.id = id;
 		this.gameWon = gameWon;
 		this.pointsAwarded = pointsAwarded;
@@ -64,11 +69,11 @@ public class Game {
 		this.pointsAwarded = pointsAwarded;
 	}
 
-	public Date getGameDate() {
+	public LocalDateTime getGameDate() {
 		return gameDate;
 	}
 
-	public void setGameDate(Date gameDate) {
+	public void setGameDate(LocalDateTime gameDate) {
 		this.gameDate = gameDate;
 	}
 

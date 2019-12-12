@@ -237,6 +237,7 @@ public class MainController {
 			user = userDAO.update(user);
 			session.setAttribute("user", user);
 			mv.addObject("user", session.getAttribute("user"));
+			mv.addObject("history", gameDAO.getGamesByUserId(user.getId()));
 			
 			Game game = new Game();
 			game.setPointsAwarded(points);
@@ -381,8 +382,8 @@ public class MainController {
 			case "medium":
 				switch (guessesRemaining) {
 					case 0: 
-						nums[8] = 9;
 						nums[9] = 10;
+						nums[8] = 9;
 					case 1:
 						nums[7] = 8;
 						nums[6] = 7;
@@ -407,6 +408,22 @@ public class MainController {
 		}
 		
 		return nums;
+	}
+	
+	@RequestMapping(path = "updatePreferences.do", method = RequestMethod.GET)
+	public ModelAndView updatePreferences(String preferredModelColor, String preferredDifficulty, HttpSession session) {
+		User user = (User)session.getAttribute("user");
+		ModelAndView mv = populateModel(session);
+		
+		if (user != null) {
+			user.setPreferredDifficulty(preferredDifficulty);
+			user.setPreferredModelColor(preferredModelColor);
+			user = userDAO.update(user);
+			session.setAttribute("user", user);
+			mv.addObject("user", user);
+		}
+		
+		return mv;
 	}
 
 }

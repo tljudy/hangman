@@ -12,6 +12,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <link rel="stylesheet" href="css/styles.css"> 
+
 </head>
 <body >
 <header class="main-header">
@@ -225,24 +226,35 @@
           <div class="w3-modal-content">
               <div class="w3-container" action="#default">
                   <div class="w3-section">
-                      <input class="w3-check" type="checkbox">
-                      <label>Hints</label>
-                    </div>
+                      <form action="updatePreferences.do" method="PUT" >
+                      
+						    <p>
+						        Preferred Model Color:
+					        	<c:choose>
+					        		<c:when test="${not empty user.preferredModelColor }" ><input name="preferredModelColor" type="hidden" id="color_value" value="${user.preferredModelColor}"></c:when>
+					        		<c:otherwise><input name="preferredModelColor" type="hidden" id="color_value" value="000000"></c:otherwise>
+				        		</c:choose>
+						        <input class="jscolor {valueElement: 'color_value'}" size="10" disabled>
+						    </p>
+						    <p>
+						        Preferred Difficulty:
+				       			<select name="preferredDifficulty">
+				       				<option value="easy" ${ user.preferredDifficulty == 'easy' ? 'selected' : ''}>Easy</option>
+				       				<option value="medium" ${ user.preferredDifficulty == 'medium' ? 'selected' : ''}>Medium</option>
+				       				<option value="hard" ${ user.preferredDifficulty == 'hard' ? 'selected' : ''}>Hard</option>
+				       			</select>
+						    </p>
+						    
+						    <button class="w3-button w3-round w3-khaki w3-padding-small" type="submit">Submit</button>
+					  </form>
+              	  </div>
                     <div class="w3-section">
-                        <label><b>Select number of guesses allowed:</b></label>
-                        <select class="w3-select w3-border w3-margin-bottom" name="option">
-                            <option value="" disabled selected>10</option>
-                            <option value="1">9</option>
-                            <option value="2">8</option>
-                            <option value="3">7</option>
-                            <option value="4">6</option>
-                            <option value="5">5</option>
-                        </select>
+                        
                     </div>
                     <div class="w3-container w3-padding-16 w3-light-grey">
                         <button onclick="document.getElementById('pref').style.display='none'" type="button" class="w3-button w3-grey">Return to game</button>
                        
-                      </div>
+                    </div>
                 </div>
               </div>
           </div>
@@ -326,7 +338,10 @@
 	       <div id="game-svg">
 	          <svg width="500" height="500" xmlns="http://www.w3.org/2000/svg" stroke="null">
 	            <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
-	            <g id="char" fill="#000" stroke="#000">
+	            <c:choose>
+		            <c:when test="${not empty user.preferredModelColor }"><g id="char" fill="#<c:out value="${user.preferredModelColor }"></c:out>" stroke="#000"></c:when>
+		            <c:otherwise><g id="char" fill="#000" stroke="#000"></c:otherwise>
+	            </c:choose>
 	             <title stroke="null">Layer 1</title>
 	             <rect id="base"   height="21" width="359" y="438.55" x="69.5" stroke-width="1.5"  <c:choose><c:when test="${character[0] eq 1}">opacity="100%"</c:when><c:otherwise>opacity="0%"</c:otherwise></c:choose> />
 	             <rect id="beam"   height="330" width="23" y="107.55" x="179.5" stroke-width="1.5"  <c:choose><c:when test="${character[1] eq 2}">opacity="100%"</c:when><c:otherwise>opacity="0%"</c:otherwise></c:choose> />
@@ -383,6 +398,7 @@
 
 
 <script src="scripts/scripts.js"></script>
+<script src="scripts/jscolor.js"></script>
 
 </body>
 </html>

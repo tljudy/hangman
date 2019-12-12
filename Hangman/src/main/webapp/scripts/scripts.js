@@ -10,7 +10,7 @@ let re = new RegExp('[a-zA-Z]{1}');
 // Called by keypress event listener below
 function makeGuess(e) {
 	const letter = String.fromCharCode(e.charCode);
-	if (puzzle) {
+	if (puzzle.innerText != '') {
 		if (re.test(letter)) {
 			if ((login == null && signUp == null)
 					|| (login.style.display == '' && signUp.style.display == '')

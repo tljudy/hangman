@@ -156,8 +156,57 @@
 	            
 	          
 	                
-	                <div class="w3-section">
-	                    <button class="w3-button w3-yellow">Reset Account</button>
+
+	                <form class="w3-container" action="updatePassword.do" method="POST" modelAttribute="userDTO">
+						<h3>Change Password</h3>
+						<hr>
+		            
+		              <div class="w3-section">
+		                <label><b>Old Password</b></label>
+		                <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="oldPassword" required>
+		                <label><b>New Password</b></label>
+		                <input class="w3-input w3-border" type="password" placeholder="Enter Password" name="newPassword" required>
+		                	<%-- <hr>
+							<h4>Select and answer at least one Secret Question</h4>
+											
+							<label for="questions1">Question 1</label>
+							<select name="questions1" class="form-control"
+								aria-label="Text input with radio button">
+								<c:forEach var="question" items="${ questions }">
+									<option value="${ question.id }">${ question.question }</option>
+								</c:forEach>
+							</select> 
+							<input name="answer1" type="text" class="form-control"
+								aria-label="Text input with radio button"> <br>
+								
+							<label for="questions2">Question 2</label>
+							<select name="questions2" class="form-control"
+								aria-label="Text input with radio button">
+								<c:forEach var="question" items="${ questions }">
+									<option value="${ question.id }">${ question.question }</option>
+								</c:forEach>
+							</select> 
+							<input name="answer2" type="text" class="form-control"
+								aria-label="Text input with radio button"> <br>
+								
+							<label for="questions3">Question 3</label>
+							<select name="questions3" class="form-control"
+								aria-label="Text input with radio button">
+								<c:forEach var="question" items="${ questions }">
+									<option value="${ question.id }">${ question.question }</option>
+								</c:forEach>
+							</select> 
+							<input name="answer3" type="text" class="form-control"
+								aria-label="Text input with radio button"><br>
+							</div> --%>
+		                <button class="w3-button w3-block w3-black w3-section w3-padding" type="submit">Change Password</button>
+		                
+		              </div>
+		            </form>
+  	                <div class="w3-section">
+	                	<form action="resetAccount.do" method="GET">
+	                    	<button class="w3-button w3-yellow" type="submit">Reset Account</button>
+	                    </form>
 	                    <button class="w3-button w3-red">Delete Account</button>
 	                </div>
 	                <div class="w3-container w3-padding-16 w3-light-grey">

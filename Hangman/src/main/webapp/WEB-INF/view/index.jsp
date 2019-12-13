@@ -313,7 +313,7 @@
 			       						<button id="buyHintButton" class="w3-button w3-round w3-tiny w3-khaki w3-padding-small" type="submit">Buy a hint! (50 Points)</button>
 		       						</c:when>
 		       						<c:otherwise>
-			       						<button id="buyHintButton" class="w3-button w3-round w3-tiny w3-khaki w3-padding-small" disabled>No hints available</button>
+			       						<button id="buyHintButton" class="w3-button w3-round w3-tiny w3-khaki w3-padding-small" disabled style="opacity: 1">No hints available</button>
 		       						</c:otherwise>
 	       						</c:choose>
 	       					</form>

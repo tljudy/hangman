@@ -46,8 +46,8 @@ public class MainController {
 		mv.addObject("questions", qDAO.getAllSecretQuestions());
 		mv.addObject("leaders", userDAO.getLeadersByPoints());
 		mv.addObject("leadersLast24", gameDAO.getLeadersLastDay());
-		User user = (User)session.getAttribute("user");
-		
+		User user = (User) session.getAttribute("user");
+
 		if (user != null) {
 			mv.addObject("history", gameDAO.getGamesByUserId(user.getId()));
 		}
@@ -95,7 +95,6 @@ public class MainController {
 		session.setAttribute("hintsAvailable", hintsAvailable);
 		session.setAttribute("character", new int[10]);
 
-
 		switch (difficulty) {
 		case "hard":
 			session.setAttribute("guessesRemaining", 5);
@@ -119,7 +118,7 @@ public class MainController {
 		mv.addObject("leadersLast24", gameDAO.getLeadersLastDay());
 
 		String letter = null;
-		
+
 		if (ltr == null || ltr.split("=").length < 2) {
 			return mv;
 		}
@@ -189,7 +188,7 @@ public class MainController {
 			if (!guesses.contains(letter)) {
 				if (letter.equals("-")) {
 					masked.append("-");
-				}else {
+				} else {
 					masked.append("_");
 				}
 			} else {
@@ -238,7 +237,7 @@ public class MainController {
 			session.setAttribute("user", user);
 			mv.addObject("user", session.getAttribute("user"));
 			mv.addObject("history", gameDAO.getGamesByUserId(user.getId()));
-			
+
 			Game game = new Game();
 			game.setPointsAwarded(points);
 			game.setUser(user);
@@ -253,7 +252,6 @@ public class MainController {
 			}
 			gameDAO.addGame(game);
 		}
-		
 
 		session.setAttribute("playing", false);
 		mv.addObject("wordString", word.toUpperCase());
@@ -322,24 +320,30 @@ public class MainController {
 
 	private ModelAndView populateModel(HttpSession session) {
 		ModelAndView mv = new ModelAndView("index");
-		mv.addObject("wordString", maskWord(((Word) session.getAttribute("word")).getWord(),
-				(ArrayList<String>) session.getAttribute("guesses")));
-		mv.addObject("questions", qDAO.getAllSecretQuestions());
-		mv.addObject("difficulty", session.getAttribute("difficulty"));
-		mv.addObject("guesses", (ArrayList<String>) session.getAttribute("guesses"));
-		mv.addObject("guessesRemaining", session.getAttribute("guessesRemaining"));
-		mv.addObject("hintsAvailable", session.getAttribute("hintsAvailable"));
-		mv.addObject("hintsPurchased", session.getAttribute("hintsPurchased"));
-		mv.addObject("character", session.getAttribute("character"));
+
+		if (session != null) {
+			mv.addObject("questions", qDAO.getAllSecretQuestions());
+			mv.addObject("difficulty", session.getAttribute("difficulty"));
+
+			if (session.getAttribute("playing") != null && (boolean) session.getAttribute("playing") != false) {
+				mv.addObject("wordString", maskWord(((Word) session.getAttribute("word")).getWord(),
+						(ArrayList<String>) session.getAttribute("guesses")));
+				mv.addObject("guesses", (ArrayList<String>) session.getAttribute("guesses"));
+				mv.addObject("guessesRemaining", session.getAttribute("guessesRemaining"));
+				mv.addObject("hintsAvailable", session.getAttribute("hintsAvailable"));
+				mv.addObject("hintsPurchased", session.getAttribute("hintsPurchased"));
+				mv.addObject("character", session.getAttribute("character"));
+			}
+
+			if (session.getAttribute("user") != null) {
+				User user = (User) session.getAttribute("user");
+				mv.addObject("user", user);
+				mv.addObject("history", gameDAO.getGamesByUserId(user.getId()));
+			}
+		}
+
 		mv.addObject("leaders", userDAO.getLeadersByPoints());
 		mv.addObject("leadersLast24", gameDAO.getLeadersLastDay());
-
-
-		if (session.getAttribute("user") != null) {
-			User user = (User)session.getAttribute("user");
-			mv.addObject("user", user);
-			mv.addObject("history", gameDAO.getGamesByUserId(user.getId()));
-		}
 
 		return mv;
 	}
@@ -366,55 +370,55 @@ public class MainController {
 
 		return points;
 	}
-	
+
 	private int[] calculateCharacter(HttpSession session) {
 		int[] nums = new int[10];
-		
-		String diff = (String)session.getAttribute("difficulty");
-		int guessesRemaining = (int)session.getAttribute("guessesRemaining");
-		
-		switch(diff) {
-			case "hard":
-				for (int i = 0; i < 10 - guessesRemaining * 2; i++) {
-					nums[i] = i + 1;
-				}
-				break;
-			case "medium":
-				switch (guessesRemaining) {
-					case 0: 
-						nums[9] = 10;
-						nums[8] = 9;
-					case 1:
-						nums[7] = 8;
-						nums[6] = 7;
-					case 2:
-						nums[5] = 6;
-					case 3: 
-						nums[4] = 5;
-					case 4:
-						nums[3] = 4;
-					case 5:
-						nums[2] = 3;
-					case 6:
-						nums[1] = 2;
-						nums[0] = 1;
-					case 7:
-				}
-				break;
-			default:
-				for (int i = 0; i < 10 - guessesRemaining; i++) {
-					nums[i] = i + 1;
-				}
+
+		String diff = (String) session.getAttribute("difficulty");
+		int guessesRemaining = (int) session.getAttribute("guessesRemaining");
+
+		switch (diff) {
+		case "hard":
+			for (int i = 0; i < 10 - guessesRemaining * 2; i++) {
+				nums[i] = i + 1;
+			}
+			break;
+		case "medium":
+			switch (guessesRemaining) {
+			case 0:
+				nums[9] = 10;
+				nums[8] = 9;
+			case 1:
+				nums[7] = 8;
+				nums[6] = 7;
+			case 2:
+				nums[5] = 6;
+			case 3:
+				nums[4] = 5;
+			case 4:
+				nums[3] = 4;
+			case 5:
+				nums[2] = 3;
+			case 6:
+				nums[1] = 2;
+				nums[0] = 1;
+			case 7:
+			}
+			break;
+		default:
+			for (int i = 0; i < 10 - guessesRemaining; i++) {
+				nums[i] = i + 1;
+			}
 		}
-		
+
 		return nums;
 	}
-	
+
 	@RequestMapping(path = "updatePreferences.do", method = RequestMethod.GET)
 	public ModelAndView updatePreferences(String preferredModelColor, String preferredDifficulty, HttpSession session) {
-		User user = (User)session.getAttribute("user");
+		User user = (User) session.getAttribute("user");
 		ModelAndView mv = populateModel(session);
-		
+
 		if (user != null) {
 			user.setPreferredDifficulty(preferredDifficulty);
 			user.setPreferredModelColor(preferredModelColor);
@@ -422,13 +426,8 @@ public class MainController {
 			session.setAttribute("user", user);
 			mv.addObject("user", user);
 		}
-		
+
 		return mv;
 	}
 
 }
-
-
-
-
-

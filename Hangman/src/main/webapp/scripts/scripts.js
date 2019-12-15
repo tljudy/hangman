@@ -3,14 +3,14 @@
 const puzzle = document.querySelector('#word');
 const input = document.getElementById('guessInput');
 const inputBtn = document.getElementById('makeGuessButton');
-const login = document.getElementById('id01');
-const signUp = document.getElementById('id02');
+const login = document.getElementById('log');
+const signUp = document.getElementById('sign');
 let re = new RegExp('[a-zA-Z]{1}');
 
 // Called by keypress event listener below
 function makeGuess(e) {
 	const letter = String.fromCharCode(e.charCode);
-	if (puzzle) {
+	if (puzzle && puzzle.innerText != '') {
 		if (re.test(letter)) {
 			if ((login == null && signUp == null)
 					|| (login.style.display == '' && signUp.style.display == '')
@@ -24,6 +24,7 @@ function makeGuess(e) {
 }
 
 document.getElementsByClassName("tablink")[0].click();
+document.getElementsByClassName("tablink")[2].click();
 
 function openTab(evt, tabName) {
   var i, x, tablinks;
@@ -32,7 +33,7 @@ function openTab(evt, tabName) {
     x[i].style.display = "none";
   }
   tablinks = document.getElementsByClassName("tablink");
-  for (i = 0; i < x.length; i++) {
+  for (i = 0; i < tablinks.length; i++) {
     tablinks[i].classList.remove("w3-light-grey");
   }
   document.getElementById(tabName).style.display = "block";
@@ -40,3 +41,5 @@ function openTab(evt, tabName) {
 }
 
 window.addEventListener('keypress', makeGuess)
+
+

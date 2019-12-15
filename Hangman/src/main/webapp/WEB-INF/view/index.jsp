@@ -11,179 +11,161 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
   <link rel="stylesheet" href="css/styles.css"> 
+
 </head>
-<body >
-<header class="main-header">
- <a href="home.do"><img src="images/logowhite.png" class="logo" title="Home"></a> 
+<body class="w3-text-theme w3-white">
+
+<div class="w3-container w3-theme-d5 w3-center " id="header"><!--start header-->
+<a href="home.do"><img src="images/logowhite.png" class="logo" title="Home" style="width: 20%; height: auto;"></a> 
  
-<c:choose>
-	 <c:when test="${ empty user }">
-		<div class="user-acc-options">
-		    <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-black w3-round w3-large">Login</button>
-		    <button onclick="document.getElementById('id02').style.display='block'" class="w3-button w3-black w3-round w3-large">Sign Up</button>
-		    <!-- start login button-->
-		    <div id="id01" class="w3-modal">
-		        <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
-		    
-		          <div class="w3-center"><br>
-		            <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
-		          </div>
-		    
-		          <form class="w3-container" action="Login.do" method="POST">
-		            <div class="w3-section">
-		              <label><b>Username</b></label>
-		              <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="username" required>
-		              <label><b>Password</b></label>
-		              <input class="w3-input w3-border" type="password" placeholder="Enter Password" name="password" required>
-		              <button class="w3-button w3-block w3-black w3-section w3-padding" type="submit">Login</button>
-		              
-		            </div>
-		          </form>
-		    
-		          <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
-		            <button onclick="document.getElementById('id01').style.display='none'" type="button" class="w3-button w3-red">Cancel</button>
-		           
-		          </div>
-		    
-		        </div>
-		      </div> 
-		      <!-- end login button-->
-		      <!--start sign in button-->
-		      <div id="id02" class="w3-modal">
-		          <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
-		      
-		            <div class="w3-center"><br>
-		              <span onclick="document.getElementById('id02').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
-		            </div>
-		      
-		            <form class="w3-container" action="CreateAccount.do" method="POST" modelAttribute="userDTO">
-						<h3>Create New Account</h3>
-						<hr>
-		            
-		              <div class="w3-section">
-		                <label><b>Username</b></label>
-		                <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="username" required>
-		                <label><b>Password</b></label>
-		                <input class="w3-input w3-border" type="password" placeholder="Enter Password" name="password" required>
-		                	<hr>
-							<h4>Select and answer at least one Secret Question</h4>
-											
-							<label for="questions1">Question 1</label>
-							<select name="questions1" class="form-control"
-								aria-label="Text input with radio button">
-								<c:forEach var="question" items="${ questions }">
-									<option value="${ question.id }">${ question.question }</option>
-								</c:forEach>
-							</select> 
-							<input name="answer1" type="text" class="form-control"
-								aria-label="Text input with radio button"> <br>
-								
-							<label for="questions2">Question 2</label>
-							<select name="questions2" class="form-control"
-								aria-label="Text input with radio button">
-								<c:forEach var="question" items="${ questions }">
-									<option value="${ question.id }">${ question.question }</option>
-								</c:forEach>
-							</select> 
-							<input name="answer2" type="text" class="form-control"
-								aria-label="Text input with radio button"> <br>
-								
-							<label for="questions3">Question 3</label>
-							<select name="questions3" class="form-control"
-								aria-label="Text input with radio button">
-								<c:forEach var="question" items="${ questions }">
-									<option value="${ question.id }">${ question.question }</option>
-								</c:forEach>
-							</select> 
-							<input name="answer3" type="text" class="form-control"
-								aria-label="Text input with radio button"><br>
-							</div>
-		                <button class="w3-button w3-block w3-black w3-section w3-padding" type="submit">Sign up</button>
-		                
-		              </div>
-		            </form>
-		      
-		            <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
-		              <button onclick="document.getElementById('id02').style.display='none'" type="button" class="w3-button w3-red">Cancel</button>
-		             
-		            </div>
-		      
+
+	<!-- start login section-->
+	<div id="log" class="w3-modal">
+	    <div class="w3-modal-content w3-card-4 w3-animate-zoom w3-theme-l5" style="max-width:600px">
+	        <header class="w3-container w3-theme-d5 w3-center ">
+	            <h2>Log In</h2>
+	          </header>
+	        <form class="w3-container" action="Login.do" method="POST">
+	          <div class="w3-section">
+	          <label><b>Username</b></label>
+	          <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="username" >
+	          <label><b>Password</b></label>
+	          <input class="w3-input w3-border w3-margin-bottom" type="password" placeholder="Enter Password" name="password">
 	          </div>
-        </div> 
-        <!-- end sign up button-->
-	</c:when>
+	          <div class="w3-section">
+	          <button class="w3-button w3-block w3-theme w3-section w3-padding" type="submit">Login</button>
+	          </div>
+	        </form><!--end login form element-->
 	
-	<c:otherwise>
-		<div class="user-acc-options">
-			<a class="w3-button w3-black w3-round w3-large">${ user.username } (${user.totalPoints})</a>
-			<a class="w3-button w3-black w3-round w3-large" href="logout.do">Logout</a>
-		</div>
-	</c:otherwise>
-</c:choose>
+	        <!--login cancel button-->
+	        <div class="w3-container w3-border-top w3-padding-16 w3-theme-l4">
+	            <button onclick="document.getElementById('log').style.display='none'" type="button" class="w3-button w3-round-large w3-red">Cancel</button>
+	        </div><!--end login cancel button-->
+	  </div>
+	</div> <!--end login section-->
+              
+	<div id="sign" class="w3-modal "> <!--start sign up button-->
+      <div class="w3-modal-content w3-card-4 w3-animate-zoom w3-theme-l5" style="max-width:600px">
+          <header class="w3-container w3-theme-d5 w3-center ">
+              <h2>Sign Up</h2>
+            </header>
+        <form class="w3-container" action="#default">
+          <div class="w3-section ">
+          <label><b>Username</b></label>
+          <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter a new Username" name="username" required>
+          <label><b>Password</b></label>
+          <input class="w3-input w3-border w3-margin-bottom" type="password" placeholder="Enter a new Password" name="password" required>
+          </div>
+
+          <div class="w3-section">                
+            <button class="w3-button w3-block w3-theme w3-section w3-padding" type="submit">Sign up</button>
+          </div>
+        </form>
+
+        <div class="w3-container w3-border-top w3-padding-16 w3-theme-l4">
+          <button onclick="document.getElementById('sign').style.display='none'" type="button" class="w3-button w3-round-large w3-red">Cancel</button>
+        </div>
+
+      </div>
+    </div> <!-- end sign up button-->
+</div> <!--end header-->
   
-<nav>   
+<div class="w3-bar w3-theme">
 	<c:if test="${not empty user }">
-		<div class="w3-bar w3-dark-black w3-large">
-	        <button onclick="document.getElementById('acc').style.display='block'"
-	        class="w3-button w3-mobile" style="width:33%" >Account</button>
+	    <button onclick="document.getElementById('acc').style.display='block'"
+    	class="w3-bar-item w3-button w3-mobile"  >Account</button>
+    </c:if>
+
+    	<button onclick="document.getElementById('ldr').style.display='block'"
+    	class="w3-bar-item w3-button w3-mobile " >Leaderboards</button>
+	
+	<c:if test="${not empty user }">
+    	<button onclick="document.getElementById('pref').style.display='block'"
+    	class="w3-bar-item w3-button w3-mobile " >Preferences</button>
+    </c:if>
+
+	<c:choose>
+		<c:when test="${empty user }">
+    		<button onclick="document.getElementById('log').style.display='block'" class=" w3-bar-item w3-button w3-right m3-mobile  ">Login</button>
+    		<button onclick="document.getElementById('sign').style.display='block'" class="w3-bar-item w3-button w3-right m3-mobile">Sign Up</button>
+		</c:when>
+	
+		<c:otherwise>
+			<div class="user-acc-options">
+				<a class="w3-bar-item w3-button w3-right m3-mobile" href="logout.do">Logout</a>
+				<a class="w3-bar-item w3-button w3-right m3-mobile">${ user.username } (${user.totalPoints})</a>
+			</div>
+		</c:otherwise>
+	</c:choose>
+	
 	        <div id="acc" class="w3-modal" >
 	          <div class="w3-container">
-	          <div class="w3-modal-content">
-	              <div class="w3-section">
-	                  <label>Username: ${user.username }</label>
-	                </div>
-	              <div class="w3-section">
-	                  <label>Game History:</label>
-	                  <table class="w3-table w3-bordered">
-	                      <tr>
-	                          <th>Word</th>
-	                          <th>Points</th>
-	                          <th>Difficulty</th>
-	                          <th>Date<th>
-                  		  </tr>
-	                      <c:forEach var="game" items="${history }">
+      <div class="w3-modal-content w3-card-4 w3-animate-zoom w3-theme-l5" style="max-width:600px">
+
+          <header class="w3-container w3-theme-d5 w3-center ">
+              <h2>Account Settings</h2>
+            </header>
+
+            <div class="w3-bar w3-theme">
+                <button class="tablink w3-bar-item  w3-button w3-mobile" style="width:50%" onclick="openTab(event, 'accop')">Account</button>
+                <button class="tablink w3-bar-item  w3-button w3-mobile" style="width:50%" onclick="openTab(event, 'gmhist')">Game History</button>
+              </div>
+
+          <div id="accop" class="w3-container w3-padding w3-theme-l5 tab ">
+              <label>Username: ${user.username} </label>
+              <div class="w3-container w3-padding">
+                  <form action="resetAccount.do" method="GET">
+                    	<button class="w3-button w3-block w3-yellow w3-padding" type="submit">Reset Account</button>
+                  </form>
+              </div>
+
+          </div>
+          <div id="gmhist" class="w3-container tab">
+              
+              <table class="w3-table w3-bordered w3-center">
+                  <tr>
+                      <th>Word</th>
+                      <th>Points</th>
+                      <th>Difficulty</th>
+                      <th>Date</th>
+                    </tr>
+                    <c:forEach var="game" items="${history }">
 	                      		<tr>
 	                      			<td>${game.word.word}</td>
 	                      			<td>${game.pointsAwarded }</td>
 	                      			<td>${game.word.difficulty }</td>
 	                      			<td>${game.gameDate }</td>
 	                      		</tr>
-	                      </c:forEach>
-	                  </table>
-	              </div>
-	            
+	                </c:forEach>
+              </table>
+          </div>
+        
+            <div class="w3-container w3-border-top w3-padding-16 w3-theme-l4">
+                <button onclick="document.getElementById('acc').style.display='none'" type="button" class="w3-button w3-theme">Return to game</button>
+               
+              </div>
+            </div>
+          </div>
+      </div> 	
+</div>            
 	          
 	                
-	                <div class="w3-section">
-	                    <button class="w3-button w3-yellow">Reset Account</button>
-	                    <button class="w3-button w3-red">Delete Account</button>
-	                </div>
-	                <div class="w3-container w3-padding-16 w3-light-grey">
-	                    <button onclick="document.getElementById('acc').style.display='none'" type="button" class="w3-button w3-grey">Return to game</button>
-	                   
-	                  </div>
-	                </div>
-	              </div>
-	          </div>
-	          
-	        </div>
 
-	</c:if>
-          <button onclick="document.getElementById('ldr').style.display='block'"
-        class="w3-button w3-mobile" style="width:33%">Leaderboards</button>
-        <div id="ldr" class="w3-modal" >
-          <div class="w3-modal-content">
-			<div class="w3-modal-content w3-card-4 w3-animate-zoom">
-	            <header class="w3-container w3-black">
-	              <h2>Leaderboards</h2>
-	            </header>
-	
-	            <div class="w3-bar w3-light-gray">
-	              <button class="tablink  w3-button w3-mobile" style="width:33%" onclick="openTab(event, 'Overall')">Overall</button>
-	              <button class="tablink  w3-button w3-mobile" style="width:33%" onclick="openTab(event, 'Last24')">Last 24 Hours</button>
-	            </div>
-              	<table id="Overall" class="w3-table w3-bordered tab">
+
+<div id="ldr" class="w3-modal" >
+      <div class="w3-modal-content w3-card-4 w3-animate-zoom w3-theme-l5" style="max-width: 600px;">
+        <header class="w3-container w3-theme-d5 w3-center ">
+          <h2>Leaderboards</h2>
+        </header>
+
+        <div class="w3-bar w3-theme">
+          <button class="tablink w3-bar-item  w3-button w3-mobile" style="width:50%" onclick="openTab(event, 'Overall')">Overall</button>
+          <button class="tablink w3-bar-item  w3-button w3-mobile" style="width:50%" onclick="openTab(event, 'Last24')">Last 24 Hours</button>
+        </div>
+          	<div id="Overall" class="w3-container w3-padding tab ">
+              <table class="w3-table w3-bordered w3-center">
 	                  <tr>
 	                      <th>Username</th>
 	                      <th>Points</th>
@@ -196,137 +178,150 @@
 	                  </c:forEach>
                     
 	              </table>
-	              <table id="Last24" class="w3-table w3-bordered tab">
-	                  <tr>
-	                      <th>Username</th>
-	                      <th>Points</th>
-	                  </tr>
-	                  <c:forEach var="leader" items="${leadersLast24 }">
-	                  	<tr>
-	                  		<td>${leader.key}</td>
-	                  		<td>${leader.value }</td>
-	                  	</tr>
-	                  </c:forEach>
-	              </table>
-	              <div class="w3-container w3-padding-16 w3-light-grey">
-	                  <button onclick="document.getElementById('ldr').style.display='none'" type="button" class="w3-button w3-grey">Return to game</button>
-	                 
-	                </div>
-            </div>
+             </div>
+           <div id="Last24" class="w3-container w3-padding tab ">
+          		<table class="w3-table w3-bordered w3-center">
+          			<tr>
+                  		<th>Username</th>
+                		<th>Points</th>
+                    </tr>
+                    <c:forEach var="leader" items="${leadersLast24 }">
+	               		<tr>
+	               			<td>${leader.key}</td>
+	               			<td>${leader.value }</td>
+	               		</tr>
+                    </c:forEach>
               
-          </div>
-          
-          </div>
+             	</table>
+      		</div>
+              
+                  <div class="w3-container w3-padding-16 w3-light-grey">
+                        <button onclick="document.getElementById('ldr').style.display='none'" type="button" class="w3-button w3-grey">Return to game</button>
+                  </div>
+       </div>
+</div>
 
-	<c:if test="${not empty user }">
-        <button onclick="document.getElementById('pref').style.display='block'"
-        class="w3-button w3-mobile" style="width:33%">Preferences</button>
-        <div id="pref" class="w3-modal">
-          <div class="w3-modal-content">
+    <div id="pref" class="w3-modal">
+      <div class="w3-modal-content w3-card-4 w3-animate-zoom w3-theme-l5" style="max-width: 600px;">
+
+          <header class="w3-container w3-theme-d5 w3-center ">
+              <h2>Preferences</h2>
+            </header>
               <div class="w3-container" action="#default">
                   <div class="w3-section">
-                      <input class="w3-check" type="checkbox">
-                      <label>Hints</label>
-                    </div>
+                      <form action="updatePreferences.do" method="PUT" >
+                      
+						    <p>
+						        Preferred Model Color:
+					        	<c:choose>
+					        		<c:when test="${not empty user.preferredModelColor }" ><input name="preferredModelColor" type="hidden" id="color_value" value="${user.preferredModelColor}"></c:when>
+					        		<c:otherwise><input name="preferredModelColor" type="hidden" id="color_value" value="000000"></c:otherwise>
+				        		</c:choose>
+						        <input class="jscolor {valueElement: 'color_value'}" size="10" disabled>
+						    </p>
+						    <p>
+						        Preferred Difficulty:
+				       			<select name="preferredDifficulty">
+				       				<option value="easy" ${ user.preferredDifficulty == 'easy' ? 'selected' : ''}>Easy</option>
+				       				<option value="medium" ${ user.preferredDifficulty == 'medium' ? 'selected' : ''}>Medium</option>
+				       				<option value="hard" ${ user.preferredDifficulty == 'hard' ? 'selected' : ''}>Hard</option>
+				       			</select>
+						    </p>
+						    
+						    <button class="w3-button w3-round w3-khaki w3-padding-small" type="submit">Submit</button>
+					  </form>
+              	  </div>
                     <div class="w3-section">
-                        <label><b>Select number of guesses allowed:</b></label>
-                        <select class="w3-select w3-border w3-margin-bottom" name="option">
-                            <option value="" disabled selected>10</option>
-                            <option value="1">9</option>
-                            <option value="2">8</option>
-                            <option value="3">7</option>
-                            <option value="4">6</option>
-                            <option value="5">5</option>
-                        </select>
+                        
                     </div>
-                    <div class="w3-container w3-padding-16 w3-light-grey">
-                        <button onclick="document.getElementById('pref').style.display='none'" type="button" class="w3-button w3-grey">Return to game</button>
-                       
-                      </div>
+                <div class="w3-container w3-border-top w3-padding-16 w3-theme-l4">
+                    <button onclick="document.getElementById('pref').style.display='none'" type="button" class="w3-button w3-theme">Return to game</button>              
+                  </div>
                 </div>
               </div>
           </div>
         
-       </c:if>
-</nav>
-</header>
     
-    
-   
-       <section> 
-	       <div id="hint" style="border: 1px solid black" class="hintContainer">
-	      	 <div>
-	       		<c:choose>
-	       		<%-- User is not logged in -- display difficulty selection only --%> 
-		       		<c:when test="${empty user }">
-		       			<form action="newGame.do" method="GET" >
-			       			<label for="difficulty">Choose Difficulty</label>
-			       			<select name="difficulty">
-			       				<option value="easy" ${ difficulty == 'easy' ? 'selected' : ''}>Easy</option>
-			       				<option value="medium" ${ difficulty == 'medium' ? 'selected' : ''}>Medium</option>
-			       				<option value="hard" ${ difficulty == 'hard' ? 'selected' : ''}>Hard</option>
-			       			</select>
-		       				<button id="newGameButton" class="w3-button w3-round w3-tiny w3-khaki w3-padding-small" type="submit">New Game!</button>
-		       			</form>
-		       		</c:when>
-	       		<%--  User is logged in -- Show 'buy hint' button  --%>
-		       		<c:otherwise>
-		               <form action="newGame.do" method="GET" >
-			       			<label for="difficulty">Choose Difficulty</label>
-			       			<select name="difficulty">
-			       				<option value="easy" ${ user.preferredDifficulty == 'easy'  ? 'selected' : ''}>Easy</option>
-			       				<option value="medium" ${ user.preferredDifficulty == 'medium' ? 'selected' : ''}>Medium</option>
-			       				<option value="hard" ${ user.preferredDifficulty == 'hard' ? 'selected' : ''}>Hard</option>
-			       			</select>
-		       				<button id="newGameButton" class="w3-button w3-round w3-tiny w3-khaki w3-padding-small" type="submit">New Game!</button>
-		       			</form>
-		       		
-		       		
-		       		</c:otherwise>
-	            </c:choose>
-	           </div>
-	           
-	           <!-- "Buy Hint" button -->
-	           <div>
-		           <c:choose>
-		           		<c:when test="${empty user }">
-		           			<form action="">
-			       				<button id="buyHintButton" class="w3-button w3-round w3-tiny w3-khaki w3-padding-small" type="submit" disabled>Log on to purchase hints</button>
-	       					</form>
-		           		</c:when>	
-		           		<c:otherwise>
-			           		<form action="buyHint.do" method="GET" >
-			           			<c:choose>
-			           				<c:when test="${hintsAvailable > hintsPurchased && not empty word}">
-			       						<button id="buyHintButton" class="w3-button w3-round w3-tiny w3-khaki w3-padding-small" type="submit">Buy a hint! (50 Points)</button>
-		       						</c:when>
-		       						<c:otherwise>
-			       						<button id="buyHintButton" class="w3-button w3-round w3-tiny w3-khaki w3-padding-small" disabled>No hints available</button>
-		       						</c:otherwise>
-	       						</c:choose>
-	       					</form>
-		           		</c:otherwise>
-		           </c:choose>
-	           </div>
-	           
-	           
-	            <!-- Hiding this since JS is watching for key presses.  Still calling click() on this button though -->
-		      <div id="guessContainer" hidden="true";>
+       <div class="w3-container w3-padding w3-margin w3-theme-l3 w3-round-large"> 
+			<div class="w3-container">
+				<div class="w3-row">
+					<div class="w3-left">
+		       			<c:choose>
+			       		<%-- User is not logged in -- display difficulty selection only --%> 
+				       		<c:when test="${empty user }">
+				       			<form action="newGame.do" method="GET" >
+					       			<label for="difficulty">Choose Difficulty</label>
+					       			<select name="difficulty">
+					       				<option value="easy" ${ difficulty == 'easy' ? 'selected' : ''}>Easy</option>
+					       				<option value="medium" ${ difficulty == 'medium' ? 'selected' : ''}>Medium</option>
+					       				<option value="hard" ${ difficulty == 'hard' ? 'selected' : ''}>Hard</option>
+					       			</select>
+				       				<button id="newGameButton" class="w3-button w3-round w3-tiny w3-khaki w3-padding-small" type="submit">New Game!</button>
+				       			</form>
+				       		</c:when>
+			       		<%--  User is logged in -- Show 'buy hint' button  --%>
+				       		<c:otherwise>
+				               <form action="newGame.do" method="GET" >
+					       			<label for="difficulty">Choose Difficulty</label>
+					       			<select name="difficulty">
+					       				<option value="easy" ${ user.preferredDifficulty == 'easy'  ? 'selected' : ''}>Easy</option>
+					       				<option value="medium" ${ user.preferredDifficulty == 'medium' ? 'selected' : ''}>Medium</option>
+					       				<option value="hard" ${ user.preferredDifficulty == 'hard' ? 'selected' : ''}>Hard</option>
+					       			</select>
+				       				<button id="newGameButton" class="w3-button w3-round w3-tiny w3-khaki w3-padding-small" type="submit">New Game!</button>
+				       			</form>
+				       		</c:otherwise>
+			            </c:choose>
+		            </div>
+	      
+					<div class="w3-right">
+				       <c:choose>
+			           		<c:when test="${empty user }">
+				           			<form action="">
+					       				<button id="buyHintButton" class="w3-tiny w3-button w3-round-large w3-right w3-theme w3-padding" type="submit" disabled>Log on to purchase hints</button>
+				   					</form>
+			           		</c:when>	
+			           		<c:otherwise>
+				           		<form action="buyHint.do" method="GET" >
+				           			<c:choose>
+				           				<c:when test="${hintsAvailable > hintsPurchased && not empty word}">
+				       						<button id="buyHintButton" class="w3-button w3-round-large w3-right w3-theme w3-padding" type="submit">Buy a hint! (50 Points)</button>
+			       						</c:when>
+			       						<c:otherwise>
+				       						<button id="buyHintButton" class="w3-button w3-round-large w3-right w3-theme w3-padding" disabled style="opacity: 1">No hints available</button>
+			       						</c:otherwise>
+			      						</c:choose>
+			      					</form>
+			           		</c:otherwise>
+			           </c:choose>
+		   				</div>
+	           		</div>
+           </div>
+             <!-- Hiding this since JS is watching for key presses.  Still calling click() on this button though -->
+		      <div id="guessContainer" hidden="true">
 		      	  <form action="guess.do" method="POST">
 			      	  <input id="guessInput" type="text" name="guess">
 					  <label for="guess">Enter your guess here!</label>	
 					  <button id="makeGuessButton" class="w3-button w3-round w3-tiny w3-khaki w3-padding-small" type="submit">Guess!</button>       	  
 		      	  </form>
 		      </div>
-	      </div>
-      </section>
+      </div>
+   
+   	      <div class="w3-row-padding w3-padding">
+       		<div class="w3-col s6 w3-theme-l3 w3-round-large " >  
+        		<c:if test="${not empty wordString }"> 
+	        		<div class="w3-bar w3-theme-d4 w3-padding w3-margin-top w3-round-large w3-center">
+			          ${guessesRemaining } guesses left!
+			        </div>
+		         </c:if>
+      
 
-       <div class="flex-container">  
-       <section id="game" class="game-area" style="border: 1px solid black">
-	       <div id="game-svg">
 	          <svg width="500" height="500" xmlns="http://www.w3.org/2000/svg" stroke="null">
 	            <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
-	            <g id="char" fill="#000" stroke="#000">
+	            <c:choose>
+		            <c:when test="${not empty user.preferredModelColor }"><g id="char" fill="#<c:out value="${user.preferredModelColor }"></c:out>" stroke="#000"></c:when>
+		            <c:otherwise><g id="char" fill="#000" stroke="#000"></c:otherwise>
+	            </c:choose>
 	             <title stroke="null">Layer 1</title>
 	             <rect id="base"   height="21" width="359" y="438.55" x="69.5" stroke-width="1.5"  <c:choose><c:when test="${character[0] eq 1}">opacity="100%"</c:when><c:otherwise>opacity="0%"</c:otherwise></c:choose> />
 	             <rect id="beam"   height="330" width="23" y="107.55" x="179.5" stroke-width="1.5"  <c:choose><c:when test="${character[1] eq 2}">opacity="100%"</c:when><c:otherwise>opacity="0%"</c:otherwise></c:choose> />
@@ -340,49 +335,48 @@
 	             <rect id="rfoot" transform="rotate(53 343.744873046875,328.2345275878906) "  height="7.201357" width="44.803193" y="324.633834" x="321.343251" fill-opacity="null" stroke-opacity="null" stroke-width="1.5"  <c:choose><c:when test="${character[9] eq 10}">opacity="100%"</c:when><c:otherwise>opacity="0%"</c:otherwise></c:choose> />
 	            </g>
 	           </svg>
-			       <div id="wordContainer">
+	           
+				<c:if test="${not empty wordString }"> 
+			       <div class="w3-bar w3-theme-d4 w3-padding w3-margin-top w3-round-large w3-center" id="wordContainer">
 				          <span id="word">${wordString }</span>
 			       </div>
+		       </c:if>
 	       	</div>	
-      </section>
-      <section id="guess-container" class="container">
-	      <div id="guesses">      
-	              <h3>Guessed letters</h3>
-	              <div>
+      
+	      <div class="w3-col s6 w3-theme-l3 w3-round-large w3-leftbar w3-topbar w3-bottombar w3-rightbar w3-border-white" style="transform: translateY(-5px)">
+	          <div class="w3-container w3-padding " >      
+	               <h3>Guessed letters: </h3>
+	               <h5>
 		              	<c:forEach var="letter" items="${guesses }">
 		              		<span class="letter" 
 			              		<c:if test="${fn:containsIgnoreCase(wordString, letter) }">style="color: green"</c:if>
 			              		<c:if test="${not fn:containsIgnoreCase(wordString, letter) }">style="color: red"</c:if>
 		              		>${letter }</span>
 		              	</c:forEach>
-	              </div>
-	              
+					</h5>		              	
+	          </div>
 	      </div>
-	      <div id = "guessesRemaining">
-	        <c:if test="${not empty wordString }">
-	      		<h5>${guessesRemaining } guesses left!</h5>
-      		</c:if>
-	      		
-	      </div>
-	      <div id="messagesContainer"> 
-	      		<h3>Messages</h3>
-	      		<div id="messages">
+	      <div class="w3-rest w3-theme-l3 w3-padding w3-round-large w3-leftbar w3-topbar w3-bottombar w3-rightbar w3-border-white" style="transform: translateY(-10px); min-height:438px"> 
+          	<div>
+                 <h3>Messages:</h3>
+                 <div id="messages">
 	      			<c:forEach var="message" items="${messages }">
 	      				<div>${message }</div>
 	      			</c:forEach>
 	      		</div>
-	      </div>
-      </section>
-      
-      </div>
+            </div>
+          </div>
+    </div>
 
-    <footer>
-      CMSC 495 <a href="about">About</a>
-    </footer>
+    <div class="w3-container w3-theme ">
+        <p><b>CMSC 495</b></p>  
+          
+      </div>
   
 
 
 <script src="scripts/scripts.js"></script>
+<script src="scripts/jscolor.js"></script>
 
 </body>
 </html>

@@ -44,6 +44,21 @@ public class GameDAOImpl implements GameDAO {
 	}
 
 	@Override
+	public List<Game> getLastFiveGamesByUserId(int id) {
+		String query = "SELECT g FROM Game g WHERE g.user.id = :user_id ORDER BY g.gameDate DESC";
+		
+		List<Game> games = null;
+		
+		try {
+			games = em.createQuery(query, Game.class).setParameter("user_id", id).setMaxResults(5).getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return games;
+	}
+
+	@Override
 	public Game addGame(Game g) {
 		g.setGameDate(LocalDateTime.now());
 		em.persist(g);
@@ -56,6 +71,17 @@ public class GameDAOImpl implements GameDAO {
 		g = this.getGameById(g.getId());
 		em.remove(g);
 		em.flush();
+	}
+	
+	@Override
+	public void deleteUserGames(User u) {
+		if (u == null) return;
+		List<Game> games = getGamesByUserId(u.getId());
+		
+		for (Game g: games) {
+			em.remove(g);
+			em.flush();
+		}
 	}
 
 	@Override

@@ -44,7 +44,7 @@ public class AuthorizationController {
 		ModelAndView mv = new ModelAndView("redirect:home.do");
 		User user = dao.findUserByUsername(userDTO.getUsername());
 
-		if (user != null || userDTO.getUsername() == null || userDTO.getPassword() == null || userDTO.getAnswer1() == null) {
+		if (user != null || userDTO.getUsername() == null || userDTO.getPassword() == null) {
 			return mv;
 		}
 

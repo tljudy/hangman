@@ -51,7 +51,7 @@
           <header class="w3-container w3-theme-d5 w3-center ">
               <h2>Sign Up</h2>
             </header>
-        <form class="w3-container" action="#default">
+        <form class="w3-container" action="CreateAccount.do" method="POST" modelAttribute="userDTO">
           <div class="w3-section ">
           <label><b>Username</b></label>
           <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter a new Username" name="username" required>

@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hangmanjpa.entities.User;
-import hangmanjpa.entities.UserSecretQuestion;
 
 @Transactional
 @Service
@@ -66,18 +65,6 @@ public class UserDAOImpl implements UserDAO {
 			
 			em.persist(user);
 			em.flush();
-			
-			UserSecretQuestion ans = ansDAO.addUserAnswer(user.getId(), userDTO.getQuestions1(), userDTO.getAnswer1());
-			user.addUserSecretQuestions(ans);
-			
-			if (userDTO.getAnswer2() != null && userDTO.getAnswer2().trim() != "" && userDTO.getQuestions2() > 0) {
-				ans = ansDAO.addUserAnswer(user.getId(), userDTO.getQuestions2(), userDTO.getAnswer2());
-				user.addUserSecretQuestions(ans);
-			}
-			if (userDTO.getAnswer3() != null && userDTO.getAnswer3().trim() != "" && userDTO.getQuestions3() > 0) {
-				ans = ansDAO.addUserAnswer(user.getId(), userDTO.getQuestions3(), userDTO.getAnswer3());
-				user.addUserSecretQuestions(ans);
-			}
 			
 		}
 		

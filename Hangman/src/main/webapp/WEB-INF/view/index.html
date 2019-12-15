@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><!--Start Head element-->
+  <title>Hangman: The Game</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+   
+</head><!--End Head Element-->
+
+<body class="w3-text-theme w3-white" ><!--Start body element-->
+
+<div class="w3-container w3-theme-d5 w3-center " id="header"><!--start header-->
+     
+         <a href="index.html"><img src="logowhite.png" class="logo" title="Home" style="width: 20%; height: auto;"></a> 
+                     
+              <!-- start login section-->
+              <div id="log" class="w3-modal">
+                  <div class="w3-modal-content w3-card-4 w3-animate-zoom w3-theme-l5" style="max-width:600px">
+                      <header class="w3-container w3-theme-d5 w3-center ">
+                          <h2>Log In</h2>
+                        </header>
+                      <form class="w3-container">
+                        <div class="w3-section">
+                        <label><b>Username</b></label>
+                        <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="usrname" >
+                        <label><b>Password</b></label>
+                        <input class="w3-input w3-border w3-margin-bottom" type="password" placeholder="Enter Password" name="psw">
+                        </div>
+                        <div class="w3-section">
+                        <button class="w3-button w3-block w3-theme w3-section w3-padding" type="submit">Login</button>
+                        </div>
+                      </form><!--end login form element-->
+
+                      <!--login cancel button-->
+                      <div class="w3-container w3-border-top w3-padding-16 w3-theme-l4">
+                          <button onclick="document.getElementById('log').style.display='none'" type="button" class="w3-button w3-round-large w3-red">Cancel</button>
+                      </div><!--end login cancel button-->
+                </div>
+              </div> <!--end login section-->
+              
+              <div id="sign" class="w3-modal "> <!--start sign up button-->
+                <div class="w3-modal-content w3-card-4 w3-animate-zoom w3-theme-l5" style="max-width:600px">
+                    <header class="w3-container w3-theme-d5 w3-center ">
+                        <h2>Sign Up</h2>
+                      </header>
+                  <form class="w3-container" action="#default">
+                    <div class="w3-section ">
+                    <label><b>Username</b></label>
+                    <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter a new Username" name="usrname" required>
+                    <label><b>Password</b></label>
+                    <input class="w3-input w3-border w3-margin-bottom" type="password" placeholder="Enter a new Password" name="psw" required>
+                    </div>
+
+                    <div class="w3-section">                
+                      <button class="w3-button w3-block w3-theme w3-section w3-padding" type="submit">Sign up</button>
+                    </div>
+                  </form>
+      
+                  <div class="w3-container w3-border-top w3-padding-16 w3-theme-l4">
+                    <button onclick="document.getElementById('sign').style.display='none'" type="button" class="w3-button w3-round-large w3-red">Cancel</button>
+                  </div>
+      
+                </div>
+              </div> <!-- end sign up button-->
+          </div> <!--end header-->
+      
+   
+
+    
+
+
+<div class="w3-bar w3-theme">
+    <button onclick="document.getElementById('acc').style.display='block'"
+    class="w3-bar-item w3-button w3-mobile"  >Account</button>
+
+    <button onclick="document.getElementById('ldr').style.display='block'"
+    class="w3-bar-item w3-button w3-mobile " >Leaderboards</button>
+
+    <button onclick="document.getElementById('pref').style.display='block'"
+    class="w3-bar-item w3-button w3-mobile " >Preferences</button>
+
+    <button onclick="document.getElementById('log').style.display='block'" class=" w3-bar-item w3-button w3-right m3-mobile  ">Login</button>
+    <button onclick="document.getElementById('sign').style.display='block'" class="w3-bar-item w3-button w3-right  m3-mobile">Sign Up</button>
+
+    <div id="acc" class="w3-modal" >
+      <div class="w3-container">
+      <div class="w3-modal-content w3-card-4 w3-animate-zoom w3-theme-l5" style="max-width:600px">
+
+          <header class="w3-container w3-theme-d5 w3-center ">
+              <h2>Account Settings</h2>
+            </header>
+
+            <div class="w3-bar w3-theme">
+                <button class="tablink w3-bar-item  w3-button w3-mobile" style="width:50%" onclick="openTab(event, 'accop')">Account</button>
+                <button class="tablink w3-bar-item  w3-button w3-mobile" style="width:50%" onclick="openTab(event, 'gmhist')">Game History</button>
+              </div>
+
+          <div id="accop" class="w3-container w3-padding w3-theme-l5 tab ">
+              <label>Username: ${user.username} </label>
+              <p></p>
+              <label>Last 5 games played:</label>
+              <div class="w3-container w3-padding">
+                  <button class="w3-button w3-block w3-yellow w3-padding">Reset Account</button>
+                  <button class="w3-button w3-block w3-red w3-padding">Delete Account</button>
+              </div>
+
+            </div>
+          <div id="gmhist" class="w3-container tab">
+              
+              <table class="w3-table w3-bordered w3-center">
+                  <tr>
+                      <th>Word</th>
+                      <th>Points</th>
+                      <th>Difficulty</th>
+                      <th>Date</th>
+                    </tr>
+                    <c:forEach var="game" items="${history }">
+	                      		<tr>
+	                      			<td>${game.word.word}</td>
+	                      			<td>${game.pointsAwarded }</td>
+	                      			<td>${game.word.difficulty }</td>
+	                      			<td>${game.gameDate }</td>
+	                      		</tr>
+	                </c:forEach>
+              </table>
+          </div>
+        
+      
+            
+           
+            <div class="w3-container w3-border-top w3-padding-16 w3-theme-l4">
+                <button onclick="document.getElementById('acc').style.display='none'" type="button" class="w3-button w3-theme">Return to game</button>
+               
+              </div>
+            </div>
+          </div>
+      </div> 
+          
+    <div id="ldr" class="w3-modal" >
+      <div class="w3-modal-content w3-card-4 w3-animate-zoom w3-theme-l5" style="max-width: 600px;">
+        <header class="w3-container w3-theme-d5 w3-center ">
+          <h2>Leaderboards</h2>
+        </header>
+
+        <div class="w3-bar w3-theme">
+          <button class="tablink w3-bar-item  w3-button w3-mobile" style="width:50%" onclick="openTab(event, 'Overal')">Overall</button>
+          <button class="tablink w3-bar-item  w3-button w3-mobile" style="width:50%" onclick="openTab(event, 'Last24')">Last 24 Hours</button>
+        </div>
+          <div id="Overal" class="w3-container w3-padding tab ">
+              <table class="w3-table w3-bordered w3-center">
+                  <tr>
+                      <th>User</th>
+                      <th>Points</th>
+                      <th>Difficulty</th>
+                    </tr>
+                    <tr>
+                        <td>Jim</td>
+                        <td>1000</td>
+                        <td>S+</td>
+                      </tr>
+
+                      <tr>
+                          <td>BoB</td>
+                          <td>850</td>
+                          <td>A</td>
+                        </tr>
+
+                        <tr>
+                            <td>Tyrone</td>
+                            <td>500</td>
+                            <td>C</td>
+                          </tr>
+              </table>
+            </div>
+            <div id="Last24" class="w3-container w3-padding tab ">
+              <table class="w3-table w3-bordered w3-center">
+                  <tr>
+                      <th>User</th>
+                      <th>Points</th>
+                      <th>Difficulty</th>
+                    </tr>
+                    <tr>
+                        <td>Hasan</td>
+                        <td>1000</td>
+                        <td>S+</td>
+                      </tr>
+
+                      <tr>
+                          <td>Terry</td>
+                          <td>850</td>
+                          <td>A</td>
+                        </tr>
+
+                        <tr>
+                            <td>Jill</td>
+                            <td>500</td>
+                            <td>C</td>
+                          </tr>
+              </table>
+            </div>
+          <script>
+              document.getElementsByClassName("tablink")[0].click();
+              
+              function openTab(evt, tabName) {
+                var i, x, tablinks;
+                x = document.getElementsByClassName("tab");
+                for (i = 0; i < x.length; i++) {
+                  x[i].style.display = "none";
+                }
+                tablinks = document.getElementsByClassName("tablink");
+                for (i = 0; i < x.length; i++) {
+                  tablinks[i].classList.remove("w3-light-grey");
+                }
+                document.getElementById(tabName).style.display = "block";
+                evt.currentTarget.classList.add("w3-light-grey");
+              }
+              </script>
+
+          <div class="w3-container w3-border-top w3-padding-16 w3-theme-l4">
+              <button onclick="document.getElementById('ldr').style.display='none'" type="button" class="w3-button w3-theme">Return to game</button>
+             
+            </div>
+          </div>
+          
+      </div>
+      
+    <div id="pref" class="w3-modal">
+      <div class="w3-modal-content w3-card-4 w3-animate-zoom w3-theme-l5" style="max-width: 600px;">
+
+          <header class="w3-container w3-theme-d5 w3-center ">
+              <h2>Preferences</h2>
+            </header>
+          <div class="w3-container" action="#default">
+              <div class="w3-section">
+                  <input class="w3-check" type="checkbox">
+                  <label>Hints</label>
+                </div>
+                <div class="w3-section">
+                    <label><b>Select number of guesses alowed:</b></label>
+                    <select class="w3-select w3-border w3-margin-bottom" name="option">
+                        <option value="" disabled selected>10</option>
+                        <option value="1">9</option>
+                        <option value="2">8</option>
+                        <option value="3">7</option>
+                        <option value="4">6</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                </div>
+                <div class="w3-container w3-border-top w3-padding-16 w3-theme-l4">
+                    <button onclick="document.getElementById('pref').style.display='none'" type="button" class="w3-button w3-theme">Return to game</button>
+                   
+                  </div>
+          </div>
+      </div>
+    
+    
+</div> 
+   
+       <div class="w3-container w3-padding w3-margin w3-theme-l3 w3-round-large"> 
+       <div class="w3-button w3-round-large w3-left w3-theme w3-padding">
+               Buy Hint (50 points)
+       </div>
+      
+       <div class="w3-button w3-round-large w3-right w3-theme w3-padding">
+          New Game
+      </div>
+      </div>
+
+
+      <div class="w3-row-padding w3-padding">
+       <div class="w3-col s6 w3-theme-l3 w3-round-large " >  
+        <div class="w3-bar w3-theme-d4 w3-padding w3-margin-top w3-round-large">
+          Guesses left: 
+        </div>
+
+
+          <svg width="500" height="500" xmlns="http://www.w3.org/2000/svg" stroke="null">
+            <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+            
+            <g id="char" fill="#000" stroke="#000">
+             <title stroke="null">Layer 1</title>
+             <rect id="base"   height="21" width="359" y="438.55" x="69.5" stroke-width="1.5"  opacity="100%"/>
+             <rect id="beam"   height="330" width="23" y="107.55" x="179.5" stroke-width="1.5"  opacity="100%"/>
+             <rect id="brace"  height="19" width="162" y="107.55" x="203.5" stroke-width="1.5"  opacity="100%"/>
+             <rect id="rope" height="41" width="6" y="126.55" x="326.5" fill-opacity="null" stroke-opacity="null" stroke-width="1.5"  opacity="100%"/>
+             <ellipse id="head" ry="33.000002" rx="31.500001" id="svg_6" cy="198.549998" cx="328.999999" fill-opacity="null" stroke-opacity="null" stroke-width="1.5"  opacity="100%"/>
+             <rect id="body" id="svg_7" height="82.999998" width="10" y="230.550001" x="322.5" fill-opacity="null" stroke-opacity="null" stroke-width="1.5"  opacity="100%"/>
+             <rect id="lhand" transform="rotate(-53 311.744873046875,259.2345275878906) "  height="7.201357" width="44.803193" y="255.633834" x="289.343251" fill-opacity="null" stroke-opacity="null" stroke-width="1.5"  opacity="100%"/>
+             <rect id="rhand" transform="rotate(53 343.74487304687506,259.2345275878906) "  height="7.201357" width="44.803193" y="255.633834" x="321.343251" fill-opacity="null" stroke-opacity="null" stroke-width="1.5"  opacity="100%"/>
+             <rect id="lfoot" transform="rotate(-53 311.7448425292969,327.23449707031256) "  height="7.201357" width="44.803193" y="323.633834" x="289.343251" fill-opacity="null" stroke-opacity="null" stroke-width="1.5"  opacity="100%"/>
+             <rect id="rfoot" transform="rotate(53 343.744873046875,328.2345275878906) "  height="7.201357" width="44.803193" y="324.633834" x="321.343251" fill-opacity="null" stroke-opacity="null" stroke-width="1.5"  opacity="100%"/>
+            </g>
+           </svg>
+      
+
+           <div class="w3-bar w3-theme-d4 w3-padding w3-margin-bottom w3-round-large" >
+              _ _ _ _
+            </div>
+       </div>
+      
+      <div class="w3-col s6 w3-theme-l3 w3-round-large w3-leftbar w3-topbar w3-bottombar w3-rightbar w3-border-white">
+       <div class="w3-container w3-padding " >      
+               <h3>Guessed letters</h3>
+               
+       </div>
+
+       
+      </div>
+
+      <div class="w3-rest w3-theme-l3 w3-padding w3-round-large w3-leftbar w3-topbar w3-bottombar w3-rightbar w3-border-white" style="height:509px"> 
+          <div >
+                  <h3>Messages:</h3>
+          </div>
+         </div>
+    </div>
+      
+      </div> 
+     
+    
+
+    
+  
+
+      <div class="w3-container w3-theme ">
+        <p><b>CMSC 495</b></p>  
+          
+      </div>
+</body>
+
+</html>
